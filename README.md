@@ -20,4 +20,4 @@
 </p>
 
 # VaporGolf
-Vapor application for Golf
+API using Vapor for Golf
