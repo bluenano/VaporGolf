@@ -9,3 +9,5 @@ final class Hole: Codable {
 
 extension Hole: PostgreSQLModel {}
 extension Hole: Migration {}
+extension Hole: Content {}
+extension Hole: Parameter {}

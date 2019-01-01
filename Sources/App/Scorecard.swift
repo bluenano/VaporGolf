@@ -8,3 +8,5 @@ final class Scorecard: Codable {
 
 extension Scorecard: PostgreSQLModel {}
 extension Scorecard: Migration {}
+extension Scorecard: Content {}
+extension Scorecard: Parameter {}

@@ -8,4 +8,5 @@ final class Score: Codable {
 
 extension Score: PostgreSQLModel {}
 extension Score: Migration {}
-
+extension Score: Content {}
+extension Score: Parameter {}

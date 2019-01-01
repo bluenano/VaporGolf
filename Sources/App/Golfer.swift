@@ -23,5 +23,6 @@ final class Golfer: Codable {
 }
 
 extension Golfer: PostgreSQLModel {}
-
 extension Golfer: Migration {}
+extension Golfer: Content {}
+extension Golfer: Parameter {}

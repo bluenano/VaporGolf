@@ -17,3 +17,4 @@ final class GolfCourse: Codable {
 extension GolfCourse: PostgreSQLModel {}
 extension GolfCourse: Migration {}
 extension GolfCourse: Content {}
+extension GolfCourse: Parameter {}
