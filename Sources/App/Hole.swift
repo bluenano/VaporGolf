@@ -1,5 +1,5 @@
 import Vapor
-import FluentSQLite
+import FluentPostgreSQL
 
 final class Hole: Codable {
     
@@ -7,5 +7,5 @@ final class Hole: Codable {
     
 }
 
-extension Hole: SQLiteModel {}
+extension Hole: PostgreSQLModel {}
 extension Hole: Migration {}

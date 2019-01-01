@@ -1,5 +1,5 @@
 import Vapor
-import FluentSQLite
+import FluentPostgreSQL
 
 final class Golfer: Codable {
     
@@ -22,11 +22,6 @@ final class Golfer: Codable {
 
 }
 
-extension Golfer: Model {
-    typealias Database = SQLiteDatabase
-    typealias ID = Int
-    
-    public static var idKey: IDKey = \Golfer.id
-}
+extension Golfer: PostgreSQLModel {}
 
 extension Golfer: Migration {}

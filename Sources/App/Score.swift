@@ -1,11 +1,11 @@
 import Vapor
-import FluentSQLite
+import FluentPostgreSQL
 
 final class Score: Codable {
    
     var id: Int?
 }
 
-extension Score: SQLiteModel {}
+extension Score: PostgreSQLModel {}
 extension Score: Migration {}
 

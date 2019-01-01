@@ -1,5 +1,5 @@
 import Vapor
-import FluentSQLite
+import FluentPostgreSQL
 
 final class GolfCourse: Codable {
     
@@ -14,6 +14,6 @@ final class GolfCourse: Codable {
     
 }
 
-extension GolfCourse: SQLiteModel {}
+extension GolfCourse: PostgreSQLModel {}
 extension GolfCourse: Migration {}
 extension GolfCourse: Content {}
