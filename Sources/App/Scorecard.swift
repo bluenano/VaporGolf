@@ -15,9 +15,19 @@ final class Scorecard: Codable {
 }
 
 extension Scorecard: PostgreSQLModel {}
-extension Scorecard: Migration {}
 extension Scorecard: Content {}
 extension Scorecard: Parameter {}
+
+extension Scorecard: Migration {
+    static func prepare(
+        on connection: PostgreSQLConnection)
+        -> Future<Void> {
+            return Database.create(self, on: connection) { builder in
+                try addProperties(to: builder)
+                builder.reference(from: \.golfCourseID, to: \GolfCourse.id)
+            }
+    }
+}
 
 extension Scorecard {
     var golfCourse: Parent<Scorecard, GolfCourse> {

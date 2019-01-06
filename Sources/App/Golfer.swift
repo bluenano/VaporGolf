@@ -18,7 +18,6 @@ final class Golfer: Codable {
         self.gender = gender
         self.weight = weight
     }
-    
 }
 
 extension Golfer: PostgreSQLModel {}
@@ -30,7 +29,9 @@ extension Golfer {
     var scores: Children<Golfer, Score> {
         return children(\.golferID)
     }
-    
+}
+
+extension Golfer {
     var ageStr: String {
         return String(age)
     }
@@ -38,7 +39,6 @@ extension Golfer {
     var weightStr: String {
         return String(weight)
     }
-    
 }
 
 

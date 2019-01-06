@@ -50,9 +50,9 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     var migrations = MigrationConfig()
     migrations.add(model: GolfCourse.self, database: .psql)
     migrations.add(model: Golfer.self, database: .psql)
+    migrations.add(model: Scorecard.self, database: .psql)
     migrations.add(model: Hole.self, database: .psql)
     migrations.add(model: Score.self, database: .psql)
-    migrations.add(model: Scorecard.self, database: .psql)
     /*
     migrations.add(model: GolfCourse.self, database: .sqlite)
     migrations.add(model: Golfer.self, database: .sqlite)

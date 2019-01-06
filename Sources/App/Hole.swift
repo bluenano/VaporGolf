@@ -29,15 +29,27 @@ final class Hole: Codable {
 }
 
 extension Hole: PostgreSQLModel {}
-extension Hole: Migration {}
 extension Hole: Content {}
 extension Hole: Parameter {}
+
+extension Hole: Migration {
+    static func prepare(
+        on connection: PostgreSQLConnection)
+        -> Future<Void> {
+            return Database.create(self, on: connection) { builder in
+                try addProperties(to: builder)
+                builder.reference(from: \.scorecardID, to: \Scorecard.id)
+            }
+    }
+}
 
 extension Hole {
     var scorecard: Parent<Hole, Scorecard> {
         return parent(\.scorecardID)
     }
-    
+}
+
+extension Hole {
     var holeNumberStr: String {
         return String(holeNumber)
     }
@@ -53,5 +65,4 @@ extension Hole {
     var yardageStr: String {
         return String(yardage)
     }
-    
 }
