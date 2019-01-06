@@ -5,37 +5,19 @@ struct GolfCoursesController: RouteCollection {
 
     func boot(router: Router) throws {
         let golfCoursesRoutes = router.grouped("api", "golfcourses")
-        golfCoursesRoutes.get(use: getAllHandler)
-        golfCoursesRoutes.get(use: getFirstHandler)
-        golfCoursesRoutes.get(use: searchHandler)
-        golfCoursesRoutes.get(use: sortedHandler)
         golfCoursesRoutes.post(GolfCourse.self, use: createHandler)
-        golfCoursesRoutes.put(use: updateHandler)
         golfCoursesRoutes.delete(use: deleteHandler)
+        golfCoursesRoutes.put(use: updateHandler)
+        golfCoursesRoutes.get(use: getAllHandler)
+        golfCoursesRoutes.get(use: getHandler)
+        golfCoursesRoutes.get("first", use: getFirstHandler)
+        golfCoursesRoutes.get("search", use: getSearchHandler)
+        golfCoursesRoutes.get("sorted", use: getSortedHandler)
     }
-    
-    func getAllHandler(_ req: Request) throws -> Future<[GolfCourse]> {
-        return GolfCourse.query(on: req).all()
-    }
-    
+
     func createHandler(_ req: Request, golfCourse: GolfCourse)
         throws -> Future<GolfCourse> {
         return golfCourse.save(on: req)
-    }
-    
-    func getHandler(_ req: Request) throws -> Future<GolfCourse> {
-        return try req.parameters.next(GolfCourse.self)
-    }
-    
-    func updateHandler(_ req: Request) throws -> Future<GolfCourse> {
-        return try flatMap(
-            to: GolfCourse.self,
-        req.parameters.next(GolfCourse.self),
-        req.content.decode(GolfCourse.self)) { golfCourse, updatedGolfCourse in
-            golfCourse.name = updatedGolfCourse.name
-            golfCourse.address = updatedGolfCourse.address
-            return golfCourse.save(on: req)
-        }
     }
     
     func deleteHandler(_ req: Request) throws -> Future<HTTPStatus> {
@@ -45,16 +27,26 @@ struct GolfCoursesController: RouteCollection {
             .transform(to: HTTPStatus.noContent)
     }
     
-    func searchHandler(_ req: Request) throws -> Future<[GolfCourse]> {
-        guard let searchTerm = req
-            .query[String.self, at: "term"] else {
-                throw Abort(.badRequest)
+    func updateHandler(_ req: Request) throws -> Future<GolfCourse> {
+        return try flatMap(
+            to: GolfCourse.self,
+            req.parameters.next(GolfCourse.self),
+            req.content.decode(GolfCourse.self)) { golfCourse, updatedGolfCourse in
+                golfCourse.name = updatedGolfCourse.name
+                golfCourse.streetAddress = updatedGolfCourse.streetAddress
+                golfCourse.city = updatedGolfCourse.city
+                golfCourse.state = updatedGolfCourse.state
+                golfCourse.phoneNumber = updatedGolfCourse.phoneNumber
+                return golfCourse.save(on: req)
         }
-        
-        return GolfCourse.query(on: req).group(.or) { or in
-            or.filter(\.name == searchTerm)
-            or.filter(\.address == searchTerm)
-        }.all()
+    }
+    
+    func getAllHandler(_ req: Request) throws -> Future<[GolfCourse]> {
+        return GolfCourse.query(on: req).all()
+    }
+    
+    func getHandler(_ req: Request) throws -> Future<GolfCourse> {
+        return try req.parameters.next(GolfCourse.self)
     }
     
     func getFirstHandler(_ req: Request) throws -> Future<GolfCourse> {
@@ -68,7 +60,22 @@ struct GolfCoursesController: RouteCollection {
         }
     }
     
-    func sortedHandler(_ req: Request) throws -> Future<[GolfCourse]> {
-        return GolfCourse.query(on: req).sort(\.name, ._ascending).all()
+    func getSearchHandler(_ req: Request) throws -> Future<[GolfCourse]> {
+        guard let searchTerm = req
+            .query[String.self, at: "term"] else {
+                throw Abort(.badRequest)
+        }
+        
+        return GolfCourse.query(on: req).group(.or) { or in
+            or.filter(\.name == searchTerm)
+            or.filter(\.streetAddress == searchTerm)
+            or.filter(\.city == searchTerm)
+            or.filter(\.state == searchTerm)
+            or.filter(\.phoneNumber == searchTerm)
+        }.all()
+    }
+    
+    func getSortedHandler(_ req: Request) throws -> Future<[GolfCourse]> {
+        return GolfCourse.query(on: req).sort(\.name, .ascending).all()
     }
 }

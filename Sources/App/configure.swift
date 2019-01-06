@@ -33,13 +33,12 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     let mysqlDatabase = MySQLDatabase(config: mysqlConfig)
     
     let hostname = Environment.get("DATABASE_HOSTNAME") ?? "localhost"
-    let username = Environment.get("DATABASE_USER") ?? "vapor"
-    let databaseName = Environment.get("DATABASE_DB") ?? "vapor"
-    let password = Environment.get("DATABASE_PASSWORD") ?? "password"
+    let username = Environment.get("DATABASE_USER") ?? "vaporgolf"
+    let databaseName = Environment.get("DATABASE_DB") ?? "vaporgolf"
+    //let password = Environment.get("DATABASE_PASSWORD") ?? "password"
     let postgresConfig = PostgreSQLDatabaseConfig(hostname: hostname,
                                                   username: username,
-                                                  database: databaseName,
-                                                  password: password)
+                                                  database: databaseName)
     let postgresDatabase = PostgreSQLDatabase(config: postgresConfig)
     
     databases.add(database: sqlite, as: .sqlite)
@@ -62,5 +61,10 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     migrations.add(model: Scorecard.self, database: .sqlite)
      */
     services.register(migrations)
+    
+    // add Fluent commands
+    var commandConfig = CommandConfig.default()
+    commandConfig.useFluentCommands()
+    services.register(commandConfig)
 
 }

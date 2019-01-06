@@ -5,13 +5,20 @@ final class GolfCourse: Codable {
     
     var id: Int?
     var name: String
-    var address: String
+    var streetAddress: String
+    var city: String
+    var state: String
+    var phoneNumber: String
     
-    init(name: String, address: String) {
+    init(name: String, streetAddress: String, city: String,
+         state: String, phoneNumber: String) {
         self.name = name
-        self.address = address
+        self.streetAddress = streetAddress
+        self.city = city
+        self.state = state
+        self.phoneNumber = phoneNumber
     }
-    
+
 }
 
 extension GolfCourse: PostgreSQLModel {}
