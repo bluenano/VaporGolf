@@ -21,3 +21,26 @@
 
 # VaporGolf
 API built using Vapor for Golfers
+
+## Documentation
+
+### Endpoints
+
+### Models
+
+## Golfer
+
+## GolfCourse
+
+## Scorecard
+
+## Hole
+
+## Score
+
+### Docker
+ 
+ Models are persisted using a PostgreSQL database running inside of a docker container. There are two docker containers 
+ running PostgreSQL, one for production and one for testing.
+
+ 
