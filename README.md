@@ -28,15 +28,14 @@ API built using Vapor for Golfers
 
 ### Models
 
-## Golfer
+#### Golfer
+#### GolfCourse
 
-## GolfCourse
+#### Scorecard
 
-## Scorecard
+#### Hole
 
-## Hole
-
-## Score
+#### Score
 
 ### Docker
  
