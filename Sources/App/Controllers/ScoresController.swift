@@ -6,10 +6,10 @@ struct ScoresController: RouteCollection {
     func boot(router: Router) throws {
         let scoresRoutes = router.grouped("api", "scores")
         scoresRoutes.post(Score.self, use: createHandler)
-        scoresRoutes.delete(use: deleteHandler)
-        scoresRoutes.put(use: updateHandler)
+        scoresRoutes.delete(Score.parameter, use: deleteHandler)
+        scoresRoutes.put(Score.parameter, use: updateHandler)
         scoresRoutes.get(use: getAllHandler)
-        scoresRoutes.get(use: getHandler)
+        scoresRoutes.get(Score.parameter, use: getHandler)
         scoresRoutes.get("first", use: getFirstHandler)
         scoresRoutes.get("search", use: getSearchHandler)
         scoresRoutes.get("sorted", use: getSortedHandler)
@@ -38,7 +38,7 @@ struct ScoresController: RouteCollection {
                 score.strokesPerHole = updatedScore.strokesPerHole
                 score.puttsPerHole = updatedScore.puttsPerHole
                 score.greensInRegulation = updatedScore.greensInRegulation
-                score.golfCourseID = updatedScore.golfCourseID
+                score.scorecardID = updatedScore.scorecardID
                 score.golferID = updatedScore.golferID
                 return score.save(on: req)
         }

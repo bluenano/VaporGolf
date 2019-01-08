@@ -27,18 +27,32 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     var databases = DatabasesConfig()
 
     let mysqlConfig = MySQLDatabaseConfig(hostname: "localhost",
-                                             username: "vapor",
+                                             username: "vaporgolf",
                                              password: "password",
                                              database: "vapor")
     let mysqlDatabase = MySQLDatabase(config: mysqlConfig)
     
     let hostname = Environment.get("DATABASE_HOSTNAME") ?? "localhost"
     let username = Environment.get("DATABASE_USER") ?? "vaporgolf"
-    let databaseName = Environment.get("DATABASE_DB") ?? "vaporgolf"
-    //let password = Environment.get("DATABASE_PASSWORD") ?? "password"
-    let postgresConfig = PostgreSQLDatabaseConfig(hostname: hostname,
-                                                  username: username,
-                                                  database: databaseName)
+    let password: String = Environment.get("DATABASE_PASSWORD") ?? "password"
+    let databaseName: String
+    let databasePort: Int
+    let postgresConfig: PostgreSQLDatabaseConfig
+    
+    if (env == .testing) {
+        databaseName = "vapor-test"
+        databasePort = 5433
+    } else {
+        databaseName = Environment.get("DATABASE_DB") ?? "vaporgolf"
+        databasePort = 5432
+    }
+
+
+    postgresConfig = PostgreSQLDatabaseConfig(hostname: hostname,
+                                              port: databasePort,
+                                              username: username,
+                                              database: databaseName,
+                                              password: password)
     let postgresDatabase = PostgreSQLDatabase(config: postgresConfig)
     
     databases.add(database: sqlite, as: .sqlite)
@@ -53,13 +67,6 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     migrations.add(model: Scorecard.self, database: .psql)
     migrations.add(model: Hole.self, database: .psql)
     migrations.add(model: Score.self, database: .psql)
-    /*
-    migrations.add(model: GolfCourse.self, database: .sqlite)
-    migrations.add(model: Golfer.self, database: .sqlite)
-    migrations.add(model: Hole.self, database: .sqlite)
-    migrations.add(model: Score.self, database: .sqlite)
-    migrations.add(model: Scorecard.self, database: .sqlite)
-     */
     services.register(migrations)
     
     // add Fluent commands

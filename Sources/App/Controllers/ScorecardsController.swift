@@ -6,11 +6,11 @@ struct ScorecardsController: RouteCollection {
     func boot(router: Router) throws {
         let scorecardsRoutes = router.grouped("api", "scorecards")
         scorecardsRoutes.post(Scorecard.self, use: createHandler)
-        scorecardsRoutes.delete(use: deleteHandler)
-        scorecardsRoutes.put(use: updateHandler)
+        scorecardsRoutes.delete(Scorecard.parameter, use: deleteHandler)
+        scorecardsRoutes.put(Scorecard.parameter, use: updateHandler)
         scorecardsRoutes.get(use: getAllHandler)
-        scorecardsRoutes.get(use: getHandler)
-        scorecardsRoutes.get(use: getFirstHandler)
+        scorecardsRoutes.get(Scorecard.parameter, use: getHandler)
+        scorecardsRoutes.get("first", use: getFirstHandler)
         scorecardsRoutes.get(Scorecard.parameter, "golfcourses", use: getGolfCourseHandler)
     }
 

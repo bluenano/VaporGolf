@@ -6,10 +6,10 @@ struct HolesController: RouteCollection {
     func boot(router: Router) throws {
         let holesRoutes = router.grouped("api", "holes")
         holesRoutes.post(Hole.self, use: createHandler)
-        holesRoutes.delete(use: deleteHandler)
-        holesRoutes.put(use: updateHandler)
+        holesRoutes.delete(Hole.parameter, use: deleteHandler)
+        holesRoutes.put(Hole.parameter, use: updateHandler)
         holesRoutes.get(use: getAllHandler)
-        holesRoutes.get(use: getHandler)
+        holesRoutes.get(Hole.parameter, use: getHandler)
         holesRoutes.get("first", use: getFirstHandler)
         holesRoutes.get("search", use: getSearchHandler)
         holesRoutes.get("sorted", use: getSortedHandler)
