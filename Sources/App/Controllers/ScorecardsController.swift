@@ -11,7 +11,9 @@ struct ScorecardsController: RouteCollection {
         scorecardsRoutes.get(use: getAllHandler)
         scorecardsRoutes.get(Scorecard.parameter, use: getHandler)
         scorecardsRoutes.get("first", use: getFirstHandler)
-        scorecardsRoutes.get(Scorecard.parameter, "golfcourses", use: getGolfCourseHandler)
+        scorecardsRoutes.get(Scorecard.parameter, "golfcourse", use: getGolfCourseHandler)
+        scorecardsRoutes.get(Scorecard.parameter, "holes", use: getHolesHandler)
+        scorecardsRoutes.get(Scorecard.parameter, "scores", use: getScoresHandler)
     }
 
     func createHandler(_ req: Request,
@@ -62,6 +64,22 @@ struct ScorecardsController: RouteCollection {
         .next(Scorecard.self)
             .flatMap(to: GolfCourse.self) {
                 scorecard in scorecard.golfCourse.get(on: req)
+        }
+    }
+    
+    func getHolesHandler(_ req: Request) throws -> Future<[Hole]> {
+        return try req
+            .parameters.next(Scorecard.self)
+            .flatMap(to: [Hole].self) { scorecard in
+                try scorecard.holes.query(on: req).all()
+        }
+    }
+    
+    func getScoresHandler(_ req: Request) throws -> Future<[Score]> {
+        return try req
+        .parameters.next(Scorecard.self)
+            .flatMap(to: [Score].self) { scorecard in
+                try scorecard.scores.query(on: req).all()
         }
     }
     

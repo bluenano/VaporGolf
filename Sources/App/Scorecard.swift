@@ -34,3 +34,12 @@ extension Scorecard {
         return parent(\.golfCourseID)
     }
 }
+
+extension Scorecard {
+    var holes: Children<Scorecard, Hole> {
+        return children(\.scorecardID)
+    }
+    var scores: Children<Scorecard, Score> {
+        return children(\.scorecardID)
+    }
+}

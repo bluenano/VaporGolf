@@ -13,7 +13,7 @@ struct HolesController: RouteCollection {
         holesRoutes.get("first", use: getFirstHandler)
         holesRoutes.get("search", use: getSearchHandler)
         holesRoutes.get("sorted", use: getSortedHandler)
-        holesRoutes.get(Hole.parameter, "scorecards", use: getScorecardHandler)
+        holesRoutes.get(Hole.parameter, "scorecard", use: getScorecardHandler)
     }
     
     func createHandler(_ req: Request, hole: Hole) throws -> Future<Hole> {
@@ -38,6 +38,7 @@ struct HolesController: RouteCollection {
                 hole.par = updatedHole.par
                 hole.handicap = updatedHole.handicap
                 hole.yardage = updatedHole.yardage
+                hole.scorecardID = updatedHole.scorecardID
                 return hole.save(on: req)
         }
     }

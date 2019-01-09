@@ -29,19 +29,24 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     let mysqlConfig = MySQLDatabaseConfig(hostname: "localhost",
                                              username: "vaporgolf",
                                              password: "password",
-                                             database: "vapor")
+                                             database: "vaporgolf")
     let mysqlDatabase = MySQLDatabase(config: mysqlConfig)
     
     let hostname = Environment.get("DATABASE_HOSTNAME") ?? "localhost"
     let username = Environment.get("DATABASE_USER") ?? "vaporgolf"
     let password: String = Environment.get("DATABASE_PASSWORD") ?? "password"
     let databaseName: String
-    let databasePort: Int
+    var databasePort: Int
     let postgresConfig: PostgreSQLDatabaseConfig
+    
+    if let testPort = Environment.get("DATABASE_PORT") {
+        databasePort = Int(testPort) ?? 5433
+    } else {
+        databasePort = 5433
+    }
     
     if (env == .testing) {
         databaseName = "vapor-test"
-        databasePort = 5433
     } else {
         databaseName = Environment.get("DATABASE_DB") ?? "vaporgolf"
         databasePort = 5432

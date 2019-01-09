@@ -8,16 +8,19 @@ final class Score: Codable {
     var strokesPerHole: [Int]
     var puttsPerHole: [Int]
     var greensInRegulation: [Bool]
+    var tee: String
     var golferID: Golfer.ID
     var scorecardID: Scorecard.ID
     
     init(date: Date, strokesPerHole: [Int],
          puttsPerHole: [Int], greensInRegulation: [Bool],
-         golferID: Golfer.ID, scorecardID: Scorecard.ID) {
+         tee: String, golferID: Golfer.ID,
+             scorecardID: Scorecard.ID) {
         self.date = date
         self.strokesPerHole = strokesPerHole
         self.puttsPerHole = puttsPerHole
         self.greensInRegulation = greensInRegulation
+        self.tee = tee
         self.golferID = golferID
         self.scorecardID = scorecardID
     }
@@ -34,7 +37,7 @@ extension Score {
         return parent(\.golferID)
     }
     
-    var golfCourse: Parent<Score, GolfCourse> {
+    var scorecard: Parent<Score, Scorecard> {
         return parent(\.scorecardID)
     }
 }

@@ -80,6 +80,7 @@ extension Score {
                        strokesPerHole: [Int] = [Int](),
                        puttsPerHole: [Int] = [Int](),
                        greensInRegulation: [Bool] = [Bool](),
+                       tee: String = "red",
                        golfer: Golfer? = nil,
                        scorecard: Scorecard? = nil,
                        on connection: PostgreSQLConnection) throws -> Score {
@@ -96,6 +97,7 @@ extension Score {
                           strokesPerHole: strokesPerHole,
                           puttsPerHole: puttsPerHole,
                           greensInRegulation: greensInRegulation,
+                          tee: tee,
                           golferID: scoreGolfer!.id!,
                           scorecardID: scoreScorecard!.id!)
         return try score.save(on: connection).wait()

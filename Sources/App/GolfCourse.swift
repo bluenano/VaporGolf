@@ -25,3 +25,9 @@ extension GolfCourse: PostgreSQLModel {}
 extension GolfCourse: Migration {}
 extension GolfCourse: Content {}
 extension GolfCourse: Parameter {}
+
+extension GolfCourse {
+    var scorecards: Children<GolfCourse, Scorecard> {
+        return children(\.golfCourseID)
+    }
+}
