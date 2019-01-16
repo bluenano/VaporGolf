@@ -14,14 +14,15 @@
 </p>
 
 # VaporGolf
-REST/HTTP API built using Vapor for use by client applications relating to Golf </br>
+REST/HTTP API built using Vapor for use by client applications relating to golf </br>
 ## Documentation
 
 ### Models
 
 #### Golfer
-Represents a person who plays Golf </br>
-Properties:
+Represents a person who plays golf </br>
+</br>
+**Properties:** </br>
 firstName: String </br>
 lastName: String </br>
 age: Int </br>
@@ -29,51 +30,56 @@ gender: String </br>
 height: Int (inches) </br>
 weight: Int (lbs) </br>
 </br>
-Relationships: Parent of Score </br>
+**Relationships:** </br>
+Parent of Score </br>
 
 #### GolfCourse
-Represents a physical location where Golfers can play Golf </br>
+Represents a physical location where golfers can play golf </br>
 </br>
-Properties: </br>
+**Properties:** </br>
 name: String </br>
 streetAddress: String </br>
 city: String </br>
 state: String </br>
 phoneNumber: String </br>
 </br>
-Relationships: Parent of Tee </br>
+**Relationships:** </br>
+Parent of Tee </br>
 
 #### Tee
 Represents a tee box on the golf course where golfers choose to play from </br>
 </br>
-Properties: </br>
+**Properties:** </br>
 name: String </br>
 </br>  
-Relationships: Child of Golf Course </br>
+**Relationships:** </br>
+Child of Golf Course </br>
 
 #### Hole
 Represents a hole on the golf course where a golfer starts by hitting </br>
 a golf ball from the tee box and ends by hitting a golf ball into a hole </br>
 </br>
-Properties: </br>
+**Properties:** </br>
 holeNumber: Int </br>
 par: Int </br>
  handicap: Int </br>
 yardage: Int </br>
 </br>
-Relationships: Child of Tee </br>
+**Relationships:** </br>
+Child of Tee </br>
   
 #### Score
 Represents the scoring results of a golfer playing golf at a golf course </br>
 </br>
-Properties: </br>
+**Properties:** </br>
 date: Date </br>
 strokesPerHole: [Int] </br>
 puttsPerHole: [Int] </br>
 greensInRegulation: [Bool] </br>
 totalScore: Int </br>
 </br>
-Relationships: Child of Golfer and Tee </br>
+**Relationships:** </br>
+Child of Golfer and Tee </br>
   
 ### Endpoints
 
