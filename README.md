@@ -15,15 +15,12 @@
 
 # VaporGolf
 REST/HTTP API built using Vapor for use by client applications relating to Golf </br>
-</br>
 ## Documentation
-</br>
+
 ### Models
-</br>
+
 #### Golfer
-</br>
 Represents a person who plays Golf </br>
-</br>
 Properties:
 firstName: String </br>
 lastName: String </br>
@@ -35,7 +32,6 @@ weight: Int (lbs) </br>
 Relationships: Parent of Score </br>
 
 #### GolfCourse
-</br>
 Represents a physical location where Golfers can play Golf </br>
 </br>
 Properties: </br>
@@ -48,7 +44,6 @@ phoneNumber: String </br>
 Relationships: Parent of Tee </br>
 
 #### Tee
-</br>
 Represents a tee box on the golf course where golfers choose to play from </br>
 </br>
 Properties: </br>
@@ -57,7 +52,6 @@ name: String </br>
 Relationships: Child of Golf Course </br>
 
 #### Hole
-</br>
 Represents a hole on the golf course where a golfer starts by hitting </br>
 a golf ball from the tee box and ends by hitting a golf ball into a hole </br>
 </br>
@@ -70,7 +64,6 @@ yardage: Int </br>
 Relationships: Child of Tee </br>
   
 #### Score
-</br>
 Represents the scoring results of a golfer playing golf at a golf course </br>
 </br>
 Properties: </br>
