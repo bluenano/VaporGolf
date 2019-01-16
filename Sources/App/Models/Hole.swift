@@ -9,21 +9,20 @@ final class Hole: Codable {
     
     var id: Int?
     var holeNumber: Int // typically 1-18
-    var tee: String
     var par: Int // typically 3-5
     var handicap: Int // typically 1-18
     var yardage: Int 
     
-    var scorecardID: Scorecard.ID
+    var teeID: Tee.ID
     
-    init(holeNumber: Int, tee: String, par: Int,
-         handicap: Int, yardage: Int, scorecardID: Scorecard.ID) {
+    init(holeNumber: Int, par: Int,
+         handicap: Int, yardage: Int,
+         teeID: Tee.ID) {
         self.holeNumber = holeNumber
-        self.tee = tee
         self.par = par
         self.handicap = handicap
         self.yardage = yardage
-        self.scorecardID = scorecardID
+        self.teeID = teeID
     }
     
 }
@@ -38,14 +37,14 @@ extension Hole: Migration {
         -> Future<Void> {
             return Database.create(self, on: connection) { builder in
                 try addProperties(to: builder)
-                builder.reference(from: \.scorecardID, to: \Scorecard.id)
+                builder.reference(from: \.teeID, to: \Tee.id)
             }
     }
 }
 
 extension Hole {
-    var scorecard: Parent<Hole, Scorecard> {
-        return parent(\.scorecardID)
+    var tee: Parent<Hole, Tee> {
+        return parent(\.teeID)
     }
 }
 

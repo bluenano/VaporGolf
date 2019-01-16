@@ -37,41 +37,39 @@ extension GolfCourse {
 
 extension Hole {
     static func create(holeNumber: Int = 0,
-                       tee: String = "",
                        par: Int = 0,
                        handicap:Int = 0,
                        yardage: Int = 0,
-                       scorecard: Scorecard? = nil,
+                       tee: Tee? = nil,
                        on connection: PostgreSQLConnection) throws -> Hole {
-        var holeScorecard = scorecard
-        if holeScorecard == nil {
-            holeScorecard = try Scorecard
+        var holeTee = tee
+        if holeTee == nil {
+            holeTee = try Tee
                 .create(on: connection)
         }
         
         let hole = Hole(holeNumber: holeNumber,
-                        tee: tee,
                         par: par,
                         handicap: handicap,
                         yardage: yardage,
-                        scorecardID: holeScorecard!.id!)
+                        teeID: holeTee!.id!)
         return try hole.save(on: connection).wait()
     }
 }
 
-extension Scorecard {
-    static func create(tees: [String] = [String](),
+extension Tee {
+    static func create(name: String = "red",
                        golfCourse: GolfCourse? = nil,
-                       on connection: PostgreSQLConnection) throws -> Scorecard {
-        var scorecardGolfCourse = golfCourse
-        if scorecardGolfCourse == nil {
-            scorecardGolfCourse = try GolfCourse
+                       on connection: PostgreSQLConnection) throws -> Tee {
+        var teeGolfCourse = golfCourse
+        if teeGolfCourse == nil {
+            teeGolfCourse = try GolfCourse
                 .create(on: connection)
         }
             
-        let scorecard = Scorecard(tees: tees,
-                                  golfCourseID: scorecardGolfCourse!.id!)
-        return try scorecard.save(on: connection).wait()
+        let tee = Tee(name: name,
+                      golfCourseID: teeGolfCourse!.id!)
+        return try tee.save(on: connection).wait()
     }
 }
 
@@ -80,26 +78,24 @@ extension Score {
                        strokesPerHole: [Int] = [Int](),
                        puttsPerHole: [Int] = [Int](),
                        greensInRegulation: [Bool] = [Bool](),
-                       tee: String = "red",
                        golfer: Golfer? = nil,
-                       scorecard: Scorecard? = nil,
+                       tee: Tee? = nil,
                        on connection: PostgreSQLConnection) throws -> Score {
         var scoreGolfer = golfer
         if scoreGolfer == nil {
             scoreGolfer = try Golfer.create(on: connection)
         }
-        var scoreScorecard = scorecard
-        if scoreScorecard == nil {
-            scoreScorecard = try Scorecard.create(on: connection)
+        var scoreTee = tee
+        if scoreTee == nil {
+            scoreTee = try Tee.create(on: connection)
         }
-        
+
         let score = Score(date: date,
                           strokesPerHole: strokesPerHole,
                           puttsPerHole: puttsPerHole,
                           greensInRegulation: greensInRegulation,
-                          tee: tee,
                           golferID: scoreGolfer!.id!,
-                          scorecardID: scoreScorecard!.id!)
+                          teeID: scoreTee!.id!)
         return try score.save(on: connection).wait()
     }
 }

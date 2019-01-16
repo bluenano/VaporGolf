@@ -96,11 +96,11 @@ final class GolferTests: XCTestCase {
     // test that all scores from a golfer can be retrieved from the API
     func testGettingAGolfersScoresFromAPI() throws {
         let golfer = try Golfer.create(on: conn)
-        let tee = "Championship"
+        let tee = try Tee.create(on: conn)
         let strokes1 = [Int](repeating: 3, count: 18)
         let score1 = try Score.create(strokesPerHole: strokes1,
-                                      tee: tee,
                                       golfer: golfer,
+                                      tee: tee,
                                       on: conn)
         _ = try Score.create(golfer: golfer,
                              on: conn)
@@ -111,11 +111,17 @@ final class GolferTests: XCTestCase {
         XCTAssertEqual(scores[0].strokesPerHole, score1.strokesPerHole)
         XCTAssertEqual(scores[0].puttsPerHole, score1.puttsPerHole)
         XCTAssertEqual(scores[0].greensInRegulation, score1.greensInRegulation)
-        XCTAssertEqual(scores[0].tee, score1.tee)
         XCTAssertEqual(scores[0].totalScore, score1.totalScore)
         XCTAssertEqual(scores[0].id, score1.id)
     }
     
+    func testDeletingAGolferFromAPI() throws {
+        
+    }
+    
+    func testUpdatingAGolferWithAPI() throws {
+        
+    }
     
     static let allTests = [
         ("testGolfersCanBeRetrievedFromAPI",
@@ -125,7 +131,11 @@ final class GolferTests: XCTestCase {
         ("testGettingASingleGolferFromAPI",
          testGettingASingleGolferFromAPI),
         ("testGettingAGolfersScoresFromAPI",
-         testGettingAGolfersScoresFromAPI)
+         testGettingAGolfersScoresFromAPI),
+        ("testDeletingAGolferFromAPI",
+         testDeletingAGolferFromAPI),
+        ("testUpdatingAGolferWithAPI",
+         testUpdatingAGolferWithAPI)
     ]
 }
 

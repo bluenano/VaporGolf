@@ -13,7 +13,7 @@ struct HolesController: RouteCollection {
         holesRoutes.get("first", use: getFirstHandler)
         holesRoutes.get("search", use: getSearchHandler)
         holesRoutes.get("sorted", use: getSortedHandler)
-        holesRoutes.get(Hole.parameter, "scorecard", use: getScorecardHandler)
+        holesRoutes.get(Hole.parameter, "tee", use: getTeeHandler)
     }
     
     func createHandler(_ req: Request, hole: Hole) throws -> Future<Hole> {
@@ -34,11 +34,10 @@ struct HolesController: RouteCollection {
             req.content.decode(Hole.self)) {
                 hole, updatedHole in
                 hole.holeNumber = updatedHole.holeNumber
-                hole.tee = updatedHole.tee
                 hole.par = updatedHole.par
                 hole.handicap = updatedHole.handicap
                 hole.yardage = updatedHole.yardage
-                hole.scorecardID = updatedHole.scorecardID
+                hole.teeID = updatedHole.teeID
                 return hole.save(on: req)
         }
     }
@@ -68,7 +67,6 @@ struct HolesController: RouteCollection {
         }
         
         return Hole.query(on: req).group(.or) { or in
-            or.filter(\.tee == searchTerm)
             or.filter(\.holeNumberStr == searchTerm)
             or.filter(\.parStr == searchTerm)
             or.filter(\.handicapStr == searchTerm)
@@ -80,11 +78,11 @@ struct HolesController: RouteCollection {
         return Hole.query(on: req).sort(\.par, .ascending).all()
     }
     
-    func getScorecardHandler(_ req: Request) throws -> Future<Scorecard> {
+    func getTeeHandler(_ req: Request) throws -> Future<Tee> {
         return try req.parameters
             .next(Hole.self)
-            .flatMap(to: Scorecard.self) {
-                hole in hole.scorecard.get(on: req)
+            .flatMap(to: Tee.self) {
+                hole in hole.tee.get(on: req)
         }
     }
     

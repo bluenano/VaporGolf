@@ -13,7 +13,7 @@ struct GolfCoursesController: RouteCollection {
         golfCoursesRoutes.get("first", use: getFirstHandler)
         golfCoursesRoutes.get("search", use: getSearchHandler)
         golfCoursesRoutes.get("sorted", use: getSortedHandler)
-        golfCoursesRoutes.get(GolfCourse.parameter, "scorecards", use: getScorecardsHandler)
+        golfCoursesRoutes.get(GolfCourse.parameter, "tees", use: getTeesHandler)
     }
 
     func createHandler(_ req: Request, golfCourse: GolfCourse)
@@ -80,11 +80,11 @@ struct GolfCoursesController: RouteCollection {
         return GolfCourse.query(on: req).sort(\.name, .ascending).all()
     }
     
-    func getScorecardsHandler(_ req: Request) throws -> Future<[Scorecard]> {
-        return try req
-        .parameters.next(GolfCourse.self)
-            .flatMap(to: [Scorecard].self) { golfCourse in
-                try golfCourse.scorecards.query(on: req).all()
+    func getTeesHandler(_ req: Request) throws -> Future<[Tee]> {
+        return try req.parameters
+        .next(GolfCourse.self)
+            .flatMap(to: [Tee].self) { golfCourse in
+                try golfCourse.tees.query(on: req).all()
         }
     }
 }

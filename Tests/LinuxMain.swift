@@ -5,7 +5,7 @@ import XCTest
 XCTMain([
     testCase(GolferTests.allTests),
     testCase(GolfCourseTests.allTests),
-    testCase(ScorecardTests.allTests),
+    testCase(TeeTests.allTests),
     testCase(HoleTests.allTests),
     testCase(ScoreTests.allTests)
 ])

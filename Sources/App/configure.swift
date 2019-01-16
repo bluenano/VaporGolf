@@ -46,7 +46,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     }
     
     if (env == .testing) {
-        databaseName = "vapor-test"
+        databaseName = "vaporgolf-test"
     } else {
         databaseName = Environment.get("DATABASE_DB") ?? "vaporgolf"
         databasePort = 5432
@@ -69,7 +69,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     var migrations = MigrationConfig()
     migrations.add(model: GolfCourse.self, database: .psql)
     migrations.add(model: Golfer.self, database: .psql)
-    migrations.add(model: Scorecard.self, database: .psql)
+    migrations.add(model: Tee.self, database: .psql)
     migrations.add(model: Hole.self, database: .psql)
     migrations.add(model: Score.self, database: .psql)
     services.register(migrations)

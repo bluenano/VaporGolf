@@ -9,7 +9,6 @@ final class ScoreTests: XCTestCase {
     let strokesPerHole = [Int](repeating: 5, count: 18)
     let puttsPerHole = [Int](repeating: 2, count: 18)
     let greensInRegulation = [Bool](repeating: false, count: 18)
-    let scoreTee = "Championship"
     
     let scoresURI = "/api/scores/"
     var app: Application!
@@ -30,7 +29,6 @@ final class ScoreTests: XCTestCase {
                                 strokesPerHole: strokesPerHole,
                                 puttsPerHole: puttsPerHole,
                                 greensInRegulation: greensInRegulation,
-                                tee: scoreTee,
                                 on: conn)
     }
     
@@ -46,7 +44,6 @@ final class ScoreTests: XCTestCase {
         XCTAssertEqual(scores[0].strokesPerHole, strokesPerHole)
         XCTAssertEqual(scores[0].puttsPerHole, puttsPerHole)
         XCTAssertEqual(scores[0].greensInRegulation, greensInRegulation)
-        XCTAssertEqual(scores[0].tee, scoreTee)
         XCTAssertEqual(scores[0].id, score.id)
     }
     
@@ -64,7 +61,6 @@ final class ScoreTests: XCTestCase {
         XCTAssertEqual(receivedScore.strokesPerHole, strokesPerHole)
         XCTAssertEqual(receivedScore.puttsPerHole, puttsPerHole)
         XCTAssertEqual(receivedScore.greensInRegulation, greensInRegulation)
-        XCTAssertEqual(receivedScore.tee, scoreTee)
         XCTAssertEqual(receivedScore.id, score.id)
         
         let scores = try app.getResponse(to: scoresURI,
@@ -75,7 +71,6 @@ final class ScoreTests: XCTestCase {
         XCTAssertEqual(scores[0].strokesPerHole, strokesPerHole)
         XCTAssertEqual(scores[0].puttsPerHole, puttsPerHole)
         XCTAssertEqual(scores[0].greensInRegulation, greensInRegulation)
-        XCTAssertEqual(scores[0].tee, scoreTee)
         XCTAssertEqual(scores[0].id, score.id)
     }
     
@@ -89,7 +84,6 @@ final class ScoreTests: XCTestCase {
         XCTAssertEqual(receivedScore.strokesPerHole, strokesPerHole)
         XCTAssertEqual(receivedScore.puttsPerHole, puttsPerHole)
         XCTAssertEqual(receivedScore.greensInRegulation, greensInRegulation)
-        XCTAssertEqual(receivedScore.tee, scoreTee)
         XCTAssertEqual(receivedScore.id, score.id)
     }
     
@@ -107,17 +101,25 @@ final class ScoreTests: XCTestCase {
         XCTAssertEqual(receivedGolfer.id, golfer.id)
     }
     
-    func testGettingAScoresScorecardFromAPI() throws {
-        let scorecard = try Scorecard.create(on: conn)
-        let score = try Score.create(scorecard: scorecard,
+    func testGettingAScoresTeeFromAPI() throws {
+        let tee = try Tee.create(on: conn)
+        let score = try Score.create(tee: tee,
                                      on: conn)
-        let receivedScorecard = try app.getResponse(
-            to:"\(scoresURI)\(score.id!)/scorecard/",
-            decodeTo: Scorecard.self)
-        XCTAssertEqual(receivedScorecard.tees, scorecard.tees)
-        XCTAssertEqual(receivedScorecard.id, scorecard.id)
+        let receivedTee = try app.getResponse(
+            to:"\(scoresURI)\(score.id!)/tee/",
+            decodeTo: Tee.self)
+        XCTAssertEqual(receivedTee.name, tee.name)
+        XCTAssertEqual(receivedTee.id, tee.id)
     }
 
+    func testDeletingaScoreFromAPI() throws {
+        
+    }
+    
+    func testUpdatingAScoreWithAPI() throws {
+    
+    }
+    
     static let allTests = [
         ("testScoresCanBeRetrievedFromAPI",
          testScoresCanBeRetrievedFromAPI),
@@ -127,7 +129,11 @@ final class ScoreTests: XCTestCase {
          testGettingASingleScoreFromAPI),
         ("testGettingAScoresGolferFromAPI",
          testGettingAScoresGolferFromAPI),
-        ("testGettingAScoresScorecardFromAPI",
-         testGettingAScoresScorecardFromAPI)
+        ("testGettingAScoresTeeFromAPI",
+         testGettingAScoresTeeFromAPI),
+        ("testDeletingAScoreFromAPI",
+         testDeletingaScoreFromAPI),
+        ("testUpdatingAScoreWithAPI",
+         testUpdatingAScoreWithAPI)
     ]
 }

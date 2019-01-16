@@ -27,7 +27,7 @@ extension GolfCourse: Content {}
 extension GolfCourse: Parameter {}
 
 extension GolfCourse {
-    var scorecards: Children<GolfCourse, Scorecard> {
+    var tees: Children<GolfCourse, Tee> {
         return children(\.golfCourseID)
     }
 }

@@ -9,7 +9,6 @@ final class HoleTests: XCTestCase {
     let holePar = 3
     let holeHandicap = 18
     let holeYardage = 205
-    let tee = "Championship"
     
     let holesURI = "/api/holes/"
     var app: Application!
@@ -27,7 +26,6 @@ final class HoleTests: XCTestCase {
     
     func getHole() throws -> Hole {
         return try Hole.create(holeNumber: holeNumber,
-                               tee: tee,
                                par: holePar,
                                handicap: holeHandicap,
                                yardage: holeYardage,
@@ -41,7 +39,6 @@ final class HoleTests: XCTestCase {
                                         decodeTo: [Hole].self)
         XCTAssertEqual(holes.count, 2)
         XCTAssertEqual(holes[0].holeNumber, holeNumber)
-        XCTAssertEqual(holes[0].tee, tee)
         XCTAssertEqual(holes[0].par, holePar)
         XCTAssertEqual(holes[0].yardage, holeYardage)
         XCTAssertEqual(holes[0].handicap, holeHandicap)
@@ -57,7 +54,6 @@ final class HoleTests: XCTestCase {
             data: hole,
             decodeTo: Hole.self)
         XCTAssertEqual(receivedHole.holeNumber, holeNumber)
-        XCTAssertEqual(receivedHole.tee, tee)
         XCTAssertEqual(receivedHole.par, holePar)
         XCTAssertEqual(receivedHole.handicap, holeHandicap)
         XCTAssertEqual(receivedHole.yardage, holeYardage)
@@ -67,7 +63,6 @@ final class HoleTests: XCTestCase {
                                         decodeTo: [Hole].self)
         XCTAssertEqual(holes.count, 1)
         XCTAssertEqual(holes[0].holeNumber, holeNumber)
-        XCTAssertEqual(holes[0].tee, tee)
         XCTAssertEqual(holes[0].par, holePar)
         XCTAssertEqual(holes[0].yardage, holeYardage)
         XCTAssertEqual(holes[0].handicap, holeHandicap)
@@ -80,7 +75,6 @@ final class HoleTests: XCTestCase {
             to: "\(holesURI)\(hole.id!)",
             decodeTo: Hole.self)
         XCTAssertEqual(receivedHole.holeNumber, holeNumber)
-        XCTAssertEqual(receivedHole.tee, tee)
         XCTAssertEqual(receivedHole.par, holePar)
         XCTAssertEqual(receivedHole.handicap, holeHandicap)
         XCTAssertEqual(receivedHole.yardage, holeYardage)
@@ -88,23 +82,30 @@ final class HoleTests: XCTestCase {
         
     }
     
-    func testGettingAHolesScorecardFromAPI() throws {
-        let scorecard = try Scorecard.create(
-            tees: [String](repeating: "red", count: 1),
+    func testGettingAHolesTeeFromAPI() throws {
+        let tee = try Tee.create(
+            name: "Championship",
             on: conn)
         let hole = try Hole.create(holeNumber: 1,
-                                   tee: scorecard.tees[0],
                                    par: 3,
                                    handicap: 18,
                                    yardage: 120,
-                                   scorecard: scorecard,
+                                   tee: tee,
                                    on: conn)
         
-        let receivedScorecard = try app.getResponse(
-            to: "\(holesURI)\(hole.id!)/scorecard/",
-            decodeTo: Scorecard.self)
-        XCTAssertEqual(receivedScorecard.tees, scorecard.tees)
-        XCTAssertEqual(receivedScorecard.id, scorecard.id)
+        let receivedTee = try app.getResponse(
+            to: "\(holesURI)\(hole.id!)/tee/",
+            decodeTo: Tee.self)
+        XCTAssertEqual(receivedTee.name, tee.name)
+        XCTAssertEqual(receivedTee.id, tee.id)
+    }
+    
+    func testDeletingAHoleFromAPI() throws {
+        
+    }
+    
+    func testUpdatingAHoleWithAPI() throws {
+        
     }
     
     static let allTests = [
@@ -114,7 +115,11 @@ final class HoleTests: XCTestCase {
          testHoleCanBeSavedWithAPI),
         ("testGettingASingleHoleFromAPI",
          testGettingASingleHoleFromAPI),
-        ("testGettingAHolesScorecardFromAPI",
-         testGettingAHolesScorecardFromAPI)
+        ("testGettingAHolesTeeFromAPI",
+         testGettingAHolesTeeFromAPI),
+        ("testDeletingAHoleFromAPI",
+         testDeletingAHoleFromAPI),
+        ("testUpdatingAHoleWithAPI",
+         testUpdatingAHoleWithAPI)
     ]
 }

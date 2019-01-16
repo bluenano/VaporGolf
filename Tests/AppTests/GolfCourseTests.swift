@@ -85,23 +85,17 @@ final class GolfCourseTests: XCTestCase {
         XCTAssertEqual(golfCourse.phoneNumber, receivedGolfCourse.phoneNumber)
         XCTAssertEqual(golfCourse.id, receivedGolfCourse.id)
     }
+
+    func testGettingAGolfCoursesTeesFromAPI() throws {
+        
+    }
     
-    func testGettingGolfCoursesScorecardsFromAPI() throws {
-        let golfCourse = try getGolfCourse()
-        let scorecard = try Scorecard.create(
-            tees: [String](repeating: "red", count: 3),
-            golfCourse: golfCourse,
-            on: conn)
-        _ = try Scorecard.create(
-            tees: [String](repeating: "blue", count: 3),
-            golfCourse: golfCourse,
-            on: conn)
-        let scorecards = try app.getResponse(
-            to: "\(golfCoursesURI)\(golfCourse.id!)/scorecards",
-            decodeTo: [Scorecard].self)
-        XCTAssertEqual(scorecards.count, 2)
-        XCTAssertEqual(scorecards[0].tees, scorecard.tees)
-        XCTAssertEqual(scorecards[0].id, scorecard.id)
+    func testDeletingAGolfCourseFromAPI() throws {
+        
+    }
+    
+    func testUpdatingAGolfCourseWithAPI() throws {
+        
     }
     
     static let allTests = [
@@ -111,7 +105,11 @@ final class GolfCourseTests: XCTestCase {
          testGolfCourseCanBeSavedWithAPI),
         ("testGettingASingleGolfCourseFromAPI",
          testGettingASingleGolfCourseFromAPI),
-        ("testGettingGolfCoursesScorecardsFromAPI",
-         testGettingGolfCoursesScorecardsFromAPI)
+        ("testGettingAGolfCoursesTeesFromAPI",
+         testGettingAGolfCoursesTeesFromAPI),
+        ("testDeletingAGolfCourseFromAPI",
+         testDeletingAGolfCourseFromAPI),
+        ("testUpdatingAGolfCourseWithAPI",
+         testUpdatingAGolfCourseWithAPI)
     ]
 }

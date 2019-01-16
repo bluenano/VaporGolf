@@ -14,7 +14,7 @@ struct ScoresController: RouteCollection {
         scoresRoutes.get("search", use: getSearchHandler)
         scoresRoutes.get("sorted", use: getSortedHandler)
         scoresRoutes.get(Score.parameter, "golfer", use: getGolferHandler)
-        scoresRoutes.get(Score.parameter, "scorecard", use: getScorecardHandler)
+        scoresRoutes.get(Score.parameter, "tee", use: getTeeHandler)
     }
     
     func createHandler(_ req: Request, score: Score)
@@ -38,8 +38,8 @@ struct ScoresController: RouteCollection {
                 score.strokesPerHole = updatedScore.strokesPerHole
                 score.puttsPerHole = updatedScore.puttsPerHole
                 score.greensInRegulation = updatedScore.greensInRegulation
-                score.scorecardID = updatedScore.scorecardID
                 score.golferID = updatedScore.golferID
+                score.teeID = updatedScore.teeID
                 return score.save(on: req)
         }
         
@@ -87,12 +87,11 @@ struct ScoresController: RouteCollection {
         }
     }
     
-    func getScorecardHandler(_ req: Request) throws -> Future<Scorecard> {
+    func getTeeHandler(_ req: Request) throws -> Future<Tee> {
         return try req.parameters
             .next(Score.self)
-            .flatMap(to: Scorecard.self) {
-                score in score.scorecard.get(on:req)
+            .flatMap(to: Tee.self) {
+                score in score.tee.get(on: req)
         }
     }
-
 }

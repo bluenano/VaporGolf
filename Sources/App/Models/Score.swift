@@ -8,21 +8,18 @@ final class Score: Codable {
     var strokesPerHole: [Int]
     var puttsPerHole: [Int]
     var greensInRegulation: [Bool]
-    var tee: String
     var golferID: Golfer.ID
-    var scorecardID: Scorecard.ID
+    var teeID: Tee.ID
     
     init(date: Date, strokesPerHole: [Int],
          puttsPerHole: [Int], greensInRegulation: [Bool],
-         tee: String, golferID: Golfer.ID,
-             scorecardID: Scorecard.ID) {
+         golferID: Golfer.ID, teeID: Tee.ID) {
         self.date = date
         self.strokesPerHole = strokesPerHole
         self.puttsPerHole = puttsPerHole
         self.greensInRegulation = greensInRegulation
-        self.tee = tee
         self.golferID = golferID
-        self.scorecardID = scorecardID
+        self.teeID = teeID
     }
     
 }
@@ -36,9 +33,8 @@ extension Score {
     var golfer: Parent<Score, Golfer> {
         return parent(\.golferID)
     }
-    
-    var scorecard: Parent<Score, Scorecard> {
-        return parent(\.scorecardID)
+    var tee: Parent<Score, Tee> {
+        return parent(\.teeID)
     }
 }
 
@@ -53,7 +49,7 @@ extension Score: Migration {
             return Database.create(self, on: connection) { builder in
                 try addProperties(to: builder)
                 builder.reference(from: \.golferID, to: \Golfer.id)
-                builder.reference(from: \.scorecardID, to: \Scorecard.id)
+                builder.reference(from: \.teeID, to: \Tee.id)
             }
     }
 }
