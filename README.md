@@ -14,68 +14,73 @@
 </p>
 
 # VaporGolf
-REST/HTTP API built using Vapor for use by client applications relating to Golf
-
+REST/HTTP API built using Vapor for use by client applications relating to Golf </br>
+</br>
 ## Documentation
-
+</br>
 ### Models
-
+</br>
 #### Golfer
-  Represents a person who plays Golf
-  
-  Properties:
-  firstName: String
-  lastName: String
-  age: Int
-  gender: String
-  height: Int (inches)
-  weight: Int (lbs)
-  
-  Relationships: Parent of Score
-  
+</br>
+Represents a person who plays Golf </br>
+</br>
+Properties:
+firstName: String </br>
+lastName: String </br>
+age: Int </br>
+gender: String </br>
+height: Int (inches) </br>
+weight: Int (lbs) </br>
+</br>
+Relationships: Parent of Score </br>
+
 #### GolfCourse
-  Represents a physical location where Golfers can play Golf
-  
-  Properties:
-  name: String
-  streetAddress: String
-  city: String
-  state: String
-  phoneNumber: String
-  
-  Relationships: Parent of Tee
+</br>
+Represents a physical location where Golfers can play Golf </br>
+</br>
+Properties: </br>
+name: String </br>
+streetAddress: String </br>
+city: String </br>
+state: String </br>
+phoneNumber: String </br>
+</br>
+Relationships: Parent of Tee </br>
 
 #### Tee
-  Represents a tee box on the golf course where golfers choose to play from
-  
-  Properties:
-  name: String
-  
-  Relationships: Child of Golf Course
-  
+</br>
+Represents a tee box on the golf course where golfers choose to play from </br>
+</br>
+Properties: </br>
+name: String </br>
+</br>  
+Relationships: Child of Golf Course </br>
+
 #### Hole
-  Represents a hole on the golf course where a golfer starts by hitting
-  a golf ball from the tee box and ends by hitting a golf ball into a hole
-  
-  Properties:
-  holeNumber: Int
-  par: Int
-  handicap: Int
-  yardage: Int
-  
-  Relationships: Child of Tee
+</br>
+Represents a hole on the golf course where a golfer starts by hitting </br>
+a golf ball from the tee box and ends by hitting a golf ball into a hole </br>
+</br>
+Properties: </br>
+holeNumber: Int </br>
+par: Int </br>
+ handicap: Int </br>
+yardage: Int </br>
+</br>
+Relationships: Child of Tee </br>
   
 #### Score
-  Represents the scoring results of a golfer playing golf at a golf course
-  
-  Properties: 
-  date: Date
-  strokesPerHole: [Int]
-  puttsPerHole: [Int]
-  greensInRegulation: [Bool]
-  totalScore: Int
-  
-  Relationships: Child of Golfer and Tee
+</br>
+Represents the scoring results of a golfer playing golf at a golf course </br>
+</br>
+Properties: </br>
+date: Date </br>
+strokesPerHole: [Int] </br>
+puttsPerHole: [Int] </br>
+greensInRegulation: [Bool] </br>
+totalScore: Int </br>
+</br>
+Relationships: Child of Golfer and Tee </br>
   
 ### Endpoints
 
@@ -90,7 +95,7 @@ REST/HTTP API built using Vapor for use by client applications relating to Golf
 #### Score Endpoints
 
 ### Docker
-  Models are persisted using a PostgreSQL database running inside of a docker container. There are two docker containers 
-  running PostgreSQL, one for production and one for testing.
+Models are persisted using a PostgreSQL database running inside of a docker container </br>
+There are two docker containers running PostgreSQL, one for production and one for testing </br>
 
  
