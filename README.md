@@ -15,6 +15,7 @@
 
 # VaporGolf
 REST/HTTP API built using Vapor for use by client applications relating to golf </br>
+
 ## Documentation
 
 ### Models
@@ -51,6 +52,7 @@ Represents a tee box on the golf course where golfers choose to play from </br>
 
 ##### Properties
 name: String </br>
+golfCourseID: GolfCourse.ID </br>
  
 ##### Relationships
 Child of Golf Course </br>
@@ -62,8 +64,9 @@ a golf ball from the tee box and ends by hitting a golf ball into a hole </br>
 ##### Properties
 holeNumber: Int </br>
 par: Int </br>
- handicap: Int </br>
+handicap: Int </br>
 yardage: Int </br>
+holeID: Hole.ID </br>
 
 ##### Relationships
 Child of Tee </br>
@@ -77,6 +80,8 @@ strokesPerHole: [Int] </br>
 puttsPerHole: [Int] </br>
 greensInRegulation: [Bool] </br>
 totalScore: Int </br>
+golferID: Golfer.ID </br>
+teeID: Tee.ID </br>
 
 ##### Relationships
 Child of Golfer and Tee </br>
@@ -84,14 +89,49 @@ Child of Golfer and Tee </br>
 ### Endpoints
 
 #### Golfer Endpoints
+| Endpoint                 | HTTP Methods | Parameters |   |   |
+|--------------------------|--------------|------------|---|---|
+| /api/golfers             |              |            |   |   |
+| /api/golfers/{golfer_id} |              |            |   |   |
+| /api/golfers/first       |              |            |   |   |
+| /api/golfers/search      |              |            |   |   |
+| /api/golfers/sorted      |              |            |   |   |
 
 #### GolfCourse Endpoints
+| Endpoint                          | HTTP Methods | Parameters |   |   |
+|-----------------------------------|--------------|------------|---|---|
+| /api/golfcourses                  |              |            |   |   |
+| /api/golfcourses/{golfcourses_id} |              |            |   |   |
+| /api/golfcourses/first            |              |            |   |   |
+| /api/golfcourses/search           |              |            |   |   |
+| /api/golfcourses/sorted           |              |            |   |   |
 
 #### Tee Endpoints
+| Endpoint           | HTTP Methods | Parameters |   |   |
+|--------------------|--------------|------------|---|---|
+| /api/tees          |              |            |   |   |
+| /api/tees/{tee_id} |              |            |   |   |
+| /api/tees/first    |              |            |   |   |
+| /api/tees/search   |              |            |   |   |
+| /api/tees/sorted   |              |            |   |   |
 
 #### Hole Endpoints
+| Endpoint             | HTTP Methods | Parameters |   |   |
+|----------------------|--------------|------------|---|---|
+| /api/holes           |              |            |   |   |
+| /api/holes/{hole_id} |              |            |   |   |
+| /api/holes/first     |              |            |   |   |
+| /api/holes/search    |              |            |   |   |
+| /api/holes/sorted    |              |            |   |   |
 
 #### Score Endpoints
+| Endpoint               | HTTP Methods | Parameters |   |   |
+|------------------------|--------------|------------|---|---|
+| /api/scores            |              |            |   |   |
+| /api/scores/{score_id} |              |            |   |   |
+| /api/scores/first      |              |            |   |   |
+| /api/scores/search     |              |            |   |   |
+| /api/scores/sorted     |              |            |   |   |
 
 ### Docker
 Models are persisted using a PostgreSQL database running inside of a docker container </br>
