@@ -73,7 +73,7 @@ Represents the scoring results of a golfer playing golf at a golf course </br>
 
 ##### Properties
 
-| id                 | Int          |
+| id                 | Int          |
 |--------------------|--------------|
 | date               | Date         |
 | strokesPerHole     | [Int]        | 
