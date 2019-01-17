@@ -60,12 +60,12 @@ Represents a hole on the golf course where a golfer starts by hitting </br>
 a golf ball from the tee box and ends by hitting a golf ball into a hole </br>
 
 ##### Properties
-| id                 | Int          |
+| id                 | Int          |
 |--------------------|--------------|
-| holeNumber         | Int          |
-| par                | Int          | 
-| handicap           | Int          |
-| yardage            | Int          |
+| holeNumber         | Int          |
+| par                | Int          | 
+| handicap           | Int          |
+| yardage            | Int          |
 
   
 #### Score
