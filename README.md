@@ -23,68 +23,65 @@ REST/HTTP API built using Vapor for use by client applications relating to golf 
 #### Golfer
 Represents a person who plays golf </br>
 
-##### Properties
-firstName: String </br>
-lastName: String </br>
-age: Int </br>
-gender: String </br>
-height: Int (inches) </br>
-weight: Int (lbs) </br>
+##### Properties 
+| id                 | Int          |
+|--------------------|--------------|
+| firstName          | String       |
+| lastName           | String       | 
+| age                | Int          |
+| gender             | String       |
+| height             | Int (inches) |
+| weight             | Int (inches) |
 
-##### Relationships
-Parent of Score </br>
 
 #### GolfCourse
 Represents a physical location where golfers can play golf </br>
 
 ##### Properties
-name: String </br>
-streetAddress: String </br>
-city: String </br>
-state: String </br>
-phoneNumber: String </br>
-
-##### Relationships
-Parent of Tee </br>
+| id                 | Int          |
+|--------------------|--------------|
+| name               | String       |
+| streetAddress      | String       | 
+| city               | String       |
+| state              | String       |
+| country            | String       |
+| phoneNumber        | String       |
 
 #### Tee
 Represents a tee box on the golf course where golfers choose to play from </br>
 
 ##### Properties
-name: String </br>
-golfCourseID: GolfCourse.ID </br>
- 
-##### Relationships
-Child of Golf Course </br>
+| id                 | Int          |
+|--------------------|--------------|
+| name               | String       |
 
 #### Hole
 Represents a hole on the golf course where a golfer starts by hitting </br>
 a golf ball from the tee box and ends by hitting a golf ball into a hole </br>
 
 ##### Properties
-holeNumber: Int </br>
-par: Int </br>
-handicap: Int </br>
-yardage: Int </br>
-holeID: Hole.ID </br>
+| id                 | Int          |
+|--------------------|--------------|
+| holeNumber         | Int          |
+| par                | Int          | 
+| handicap           | Int          |
+| yardage            | Int          |
 
-##### Relationships
-Child of Tee </br>
   
 #### Score
 Represents the scoring results of a golfer playing golf at a golf course </br>
 
 ##### Properties
-date: Date </br>
-strokesPerHole: [Int] </br>
-puttsPerHole: [Int] </br>
-greensInRegulation: [Bool] </br>
-totalScore: Int </br>
-golferID: Golfer.ID </br>
-teeID: Tee.ID </br>
 
-##### Relationships
-Child of Golfer and Tee </br>
+| id                 | Int          |
+|--------------------|--------------|
+| date               | Date         |
+| strokesPerHole     | [Int]        | 
+| puttsPerHole       | [Int]        |
+| greensInRegulation | [Bool]       |
+| totalScore         | Int          |
+| golferID           | Golfer.ID    |
+| teeID              | Tee.ID       |
   
 ### Endpoints
 
