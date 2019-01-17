@@ -17,8 +17,7 @@ struct ScoresController: RouteCollection {
         scoresRoutes.get(Score.parameter, "tee", use: getTeeHandler)
     }
     
-    func createHandler(_ req: Request, score: Score)
-        throws -> Future<Score> {
+    func createHandler(_ req: Request, score: Score) throws -> Future<Score> {
             return score.save(on: req)
     }
     
