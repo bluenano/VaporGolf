@@ -41,7 +41,7 @@ Represents a physical location where golfers can play golf </br>
 | id                 | Int          |
 |--------------------|--------------|
 | name               | String       |
-| streetAddress      | String       | 
+| streetAddress      | String       |
 | city               | String       |
 | state              | String       |
 | country            | String       |
@@ -60,12 +60,12 @@ Represents a hole on the golf course where a golfer starts by hitting </br>
 a golf ball from the tee box and ends by hitting a golf ball into a hole </br>
 
 ##### Properties
-| id                 | Int          |
+| id                 | Int          |
 |--------------------|--------------|
-| holeNumber         | Int          |
-| par                | Int          | 
-| handicap           | Int          |
-| yardage            | Int          |
+| holeNumber         | Int          |
+| par                | Int          | 
+| handicap           | Int          |
+| yardage            | Int          |
 
   
 #### Score
@@ -73,15 +73,15 @@ Represents the scoring results of a golfer playing golf at a golf course </br>
 
 ##### Properties
 
-| id                 | Int          |
+| id                 | Int          |
 |--------------------|--------------|
-| date               | Date         |
-| strokesPerHole     | [Int]        | 
-| puttsPerHole       | [Int]        |
-| greensInRegulation | [Bool]       |
-| totalScore         | Int          |
-| golferID           | Golfer.ID    |
-| teeID              | Tee.ID       |
+| date               | Date         |
+| strokesPerHole     | [Int]        | 
+| puttsPerHole       | [Int]        |
+| greensInRegulation | [Bool]       |
+| totalScore         | Int          |
+| golferID           | Golfer.ID    |
+| teeID              | Tee.ID       |
   
 ### Endpoints
 
