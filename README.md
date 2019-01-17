@@ -24,48 +24,48 @@ REST/HTTP API built using Vapor for use by client applications relating to golf 
 Represents a person who plays golf </br>
 
 ##### Properties 
-| id                 | Int          |
+| id                 | Int          |
 |--------------------|--------------|
-| firstName          | String       |
-| lastName           | String       | 
-| age                | Int          |
-| gender             | String       |
-| height             | Int (inches) |
-| weight             | Int (inches) |
+| firstName          | String       |
+| lastName           | String       | 
+| age                | Int          |
+| gender             | String       |
+| height             | Int (inches) |
+| weight             | Int (inches) |
 
 
 #### GolfCourse
 Represents a physical location where golfers can play golf </br>
 
 ##### Properties
-| id                 | Int          |
+| id                 | Int          |
 |--------------------|--------------|
-| name               | String       |
-| streetAddress      | String       | 
-| city               | String       |
-| state              | String       |
-| country            | String       |
-| phoneNumber        | String       |
+| name               | String       |
+| streetAddress      | String       | 
+| city               | String       |
+| state              | String       |
+| country            | String       |
+| phoneNumber        | String       |
 
 #### Tee
 Represents a tee box on the golf course where golfers choose to play from </br>
 
 ##### Properties
-| id                 | Int          |
+| id                 | Int          |
 |--------------------|--------------|
-| name               | String       |
+| name               | String       |
 
 #### Hole
 Represents a hole on the golf course where a golfer starts by hitting </br>
 a golf ball from the tee box and ends by hitting a golf ball into a hole </br>
 
 ##### Properties
-| id                 | Int          |
+| id                 | Int          |
 |--------------------|--------------|
-| holeNumber         | Int          |
-| par                | Int          | 
-| handicap           | Int          |
-| yardage            | Int          |
+| holeNumber         | Int          |
+| par                | Int          | 
+| handicap           | Int          |
+| yardage            | Int          |
 
   
 #### Score
@@ -73,15 +73,15 @@ Represents the scoring results of a golfer playing golf at a golf course </br>
 
 ##### Properties
 
-| id                 | Int          |
+| id                 | Int          |
 |--------------------|--------------|
-| date               | Date         |
-| strokesPerHole     | [Int]        | 
-| puttsPerHole       | [Int]        |
-| greensInRegulation | [Bool]       |
-| totalScore         | Int          |
-| golferID           | Golfer.ID    |
-| teeID              | Tee.ID       |
+| date               | Date         |
+| strokesPerHole     | [Int]        | 
+| puttsPerHole       | [Int]        |
+| greensInRegulation | [Bool]       |
+| totalScore         | Int          |
+| golferID           | Golfer.ID    |
+| teeID              | Tee.ID       |
   
 ### Endpoints
 
