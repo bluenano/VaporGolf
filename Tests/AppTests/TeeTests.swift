@@ -79,11 +79,25 @@ final class TeeTests: XCTestCase {
     }
     
     func testDeletingATeeFromAPI() throws {
-        
+        let tee = try getTee()
+        let receivedStatus = try app.getResponseStatus(
+            to: "\(teesURI)\(tee.id!)",
+            method: .DELETE)
+        XCTAssertNotEqual(receivedStatus, .notFound)
+        XCTAssertEqual(receivedStatus, .noContent)
     }
     
     func testUpdatingATeeWithAPI() throws {
-        
+        let tee = try getTee()
+        tee.name = teeName + "2"
+        let receivedTee = try app.getResponse(
+            to: "\(teesURI)\(tee.id!)",
+            method: .PUT,
+            headers: ["Content-Type": "application/json"],
+            data: tee,
+            decodeTo: Tee.self)
+        XCTAssertEqual(receivedTee.name, teeName + "2")
+        XCTAssertEqual(receivedTee.id, tee.id)
     }
 
     static let allTests = [

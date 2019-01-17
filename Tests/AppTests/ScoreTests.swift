@@ -112,12 +112,34 @@ final class ScoreTests: XCTestCase {
         XCTAssertEqual(receivedTee.id, tee.id)
     }
 
-    func testDeletingaScoreFromAPI() throws {
-        
+    func testDeletingAScoreFromAPI() throws {
+        let score = try getScore()
+        let receivedStatus = try app.getResponseStatus(
+            to: "\(scoresURI)\(score.id!)",
+            method: .DELETE)
+        XCTAssertNotEqual(receivedStatus, .notFound)
+        XCTAssertEqual(receivedStatus, .noContent)
+
     }
     
     func testUpdatingAScoreWithAPI() throws {
-    
+        let score = try getScore()
+        for i in 0..<score.strokesPerHole.count {
+            score.strokesPerHole[i] += 1
+        }
+        let receivedScore = try app.getResponse(
+            to: "\(scoresURI)\(score.id!)",
+            method: .PUT,
+            headers: ["Content-Type": "application/json"],
+            data: score,
+            decodeTo: Score.self)
+        for i in 0..<receivedScore.strokesPerHole.count {
+            XCTAssertEqual(receivedScore.strokesPerHole[i],
+                           strokesPerHole[i]+1)
+        }
+        XCTAssertEqual(receivedScore.puttsPerHole, puttsPerHole)
+        XCTAssertEqual(receivedScore.greensInRegulation, greensInRegulation)
+        XCTAssertEqual(receivedScore.totalScore, score.totalScore)
     }
     
     static let allTests = [
@@ -132,7 +154,7 @@ final class ScoreTests: XCTestCase {
         ("testGettingAScoresTeeFromAPI",
          testGettingAScoresTeeFromAPI),
         ("testDeletingAScoreFromAPI",
-         testDeletingaScoreFromAPI),
+         testDeletingAScoreFromAPI),
         ("testUpdatingAScoreWithAPI",
          testUpdatingAScoreWithAPI)
     ]

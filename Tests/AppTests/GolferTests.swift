@@ -116,11 +116,29 @@ final class GolferTests: XCTestCase {
     }
     
     func testDeletingAGolferFromAPI() throws {
-        
+        let golfer = try getGolfer()
+        let receivedStatus = try app.getResponseStatus(
+            to: "\(golfersURI)\(golfer.id!)",
+            method: .DELETE)
+        XCTAssertNotEqual(receivedStatus, .notFound)
+        XCTAssertEqual(receivedStatus, .noContent)
     }
     
     func testUpdatingAGolferWithAPI() throws {
-        
+        let golfer = try getGolfer()
+        golfer.firstName = golfersFirstName + "2"
+        let receivedGolfer = try app.getResponse(
+            to: "\(golfersURI)\(golfer.id!)",
+            method: .PUT,
+            headers: ["Content-Type": "application/json"],
+            data: golfer,
+            decodeTo: Golfer.self)
+        XCTAssertEqual(receivedGolfer.firstName, golfersFirstName + "2")
+        XCTAssertEqual(receivedGolfer.lastName, golfersLastName)
+        XCTAssertEqual(receivedGolfer.age, golfersAge)
+        XCTAssertEqual(receivedGolfer.weight, golfersWeight)
+        XCTAssertEqual(receivedGolfer.gender, golfersGender)
+        XCTAssertEqual(receivedGolfer.id, golfer.id)
     }
     
     static let allTests = [

@@ -99,6 +99,17 @@ extension Application {
                                         data: emptyContent,
                                         decodeTo: type)
     }
+    
+    func getResponseStatus(to path: String,
+                     method: HTTPMethod = .GET,
+                     headers: HTTPHeaders = .init())
+        throws -> HTTPResponseStatus {
+            let response = try self.sendRequest(
+                to: path,
+                method: method,
+                headers: headers)
+            return response.http.status
+    }
 }
 
 // used when there is no body to send in a request

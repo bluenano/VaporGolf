@@ -91,11 +91,30 @@ final class GolfCourseTests: XCTestCase {
     }
     
     func testDeletingAGolfCourseFromAPI() throws {
-        
+        let golfCourse = try getGolfCourse()
+        let receivedStatus = try app.getResponseStatus(
+            to: "\(golfCoursesURI)\(golfCourse.id!)",
+            method: .DELETE
+        )
+        XCTAssertNotEqual(receivedStatus, .notFound)
+        XCTAssertEqual(receivedStatus, .noContent)
     }
     
     func testUpdatingAGolfCourseWithAPI() throws {
-        
+        let golfCourse = try getGolfCourse()
+        golfCourse.name += "2"
+        let receivedGolfCourse = try app.getResponse(
+            to: "\(golfCoursesURI)\(golfCourse.id!)",
+            method: .PUT,
+            headers: ["Content-Type": "application/json"],
+            data: golfCourse,
+            decodeTo: GolfCourse.self)
+        XCTAssertEqual(receivedGolfCourse.name, golfCoursesName + "2")
+        XCTAssertEqual(receivedGolfCourse.streetAddress, golfCoursesStreetAddress)
+        XCTAssertEqual(receivedGolfCourse.city, golfCoursesCity)
+        XCTAssertEqual(receivedGolfCourse.state, golfCoursesState)
+        XCTAssertEqual(receivedGolfCourse.phoneNumber, golfCoursesPhoneNumber)
+        XCTAssertEqual(receivedGolfCourse.id, golfCourse.id)
     }
     
     static let allTests = [

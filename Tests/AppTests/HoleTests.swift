@@ -101,11 +101,28 @@ final class HoleTests: XCTestCase {
     }
     
     func testDeletingAHoleFromAPI() throws {
-        
+        let hole = try getHole()
+        let receivedStatus = try app.getResponseStatus(
+            to: "\(holesURI)\(hole.id!)",
+            method: .DELETE)
+        XCTAssertNotEqual(receivedStatus, .notFound)
+        XCTAssertEqual(receivedStatus, .noContent)
     }
     
     func testUpdatingAHoleWithAPI() throws {
-        
+        let hole = try getHole()
+        hole.handicap = holeHandicap+1
+        let receivedHole = try app.getResponse(
+            to: "\(holesURI)\(hole.id!)",
+            method: .PUT,
+            headers: ["Content-Type": "application/json"],
+            data: hole,
+            decodeTo: Hole.self)
+        XCTAssertEqual(receivedHole.holeNumber, holeNumber)
+        XCTAssertEqual(receivedHole.par, holePar)
+        XCTAssertEqual(receivedHole.handicap, holeHandicap+1)
+        XCTAssertEqual(receivedHole.yardage, holeYardage)
+        XCTAssertEqual(receivedHole.id, hole.id)
     }
     
     static let allTests = [
