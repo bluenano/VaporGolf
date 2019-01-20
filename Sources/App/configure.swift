@@ -72,6 +72,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     migrations.add(model: Tee.self, database: .psql)
     migrations.add(model: Hole.self, database: .psql)
     migrations.add(model: Score.self, database: .psql)
+    migrations.add(model: ScoreImage.self, database: .psql)
     services.register(migrations)
     
     // add Fluent commands

@@ -28,7 +28,6 @@ extension Score: PostgreSQLModel {}
 extension Score: Content {}
 extension Score: Parameter {}
 
-// access the parent of a score (Golfer)
 extension Score {
     var golfer: Parent<Score, Golfer> {
         return parent(\.golferID)
@@ -38,9 +37,11 @@ extension Score {
     }
 }
 
-// add foreign key constraint to Score table
-// now we must make sure that we create Golfer table
-// before the Score table
+extension Score {
+    var scoreImage: Children<Score, ScoreImage> {
+        return children(\.scoreID)
+    }
+}
 
 extension Score: Migration {
     static func prepare(
@@ -54,7 +55,6 @@ extension Score: Migration {
     }
 }
 
-// add computed property for total score
 extension Score {
     var totalScore: Int {
         var total: Int = 0

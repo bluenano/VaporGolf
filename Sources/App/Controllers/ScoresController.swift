@@ -93,4 +93,12 @@ struct ScoresController: RouteCollection {
                 score in score.tee.get(on: req)
         }
     }
+    
+    func getScoreImageHandler(_ req: Request) throws -> Future<[ScoreImage]> {
+        return try req.parameters
+            .next(Score.self)
+            .flatMap(to: [ScoreImage].self) { score in
+                try score.scoreImage.query(on: req).all()
+        }
+    }
 }

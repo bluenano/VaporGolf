@@ -12,6 +12,6 @@ services:
   postgres:
     image: "postgres"
     environment:
-      - POSTGRES_DB=vapor-test
+      - POSTGRES_DB=vaporgolf-test
       - POSTGRES_USER=vaporgolf 
       - POSTGRES_PASSWORD=password

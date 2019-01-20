@@ -99,3 +99,29 @@ extension Score {
         return try score.save(on: connection).wait()
     }
 }
+
+extension ScoreImage {
+    static func create(imageData: File? = nil,
+                       score: Score? = nil,
+                       on connection: PostgreSQLConnection)
+        throws -> ScoreImage {
+            var scoreLocal = score
+            if scoreLocal == nil {
+                scoreLocal = try Score.create(on: connection)
+            }
+            let scoreImage = ScoreImage(imageData: imageData,
+                                        scoreID: scoreLocal!.id!)
+            return try scoreImage.save(on: connection).wait()
+    }
+    
+    static func loadScoreImageFile(from filename: String)
+        throws -> File? {
+            let fileManager = FileManager.default
+            let path = fileManager.currentDirectoryPath
+            let targetPath = path + "/Images/" + filename
+            if let nsData = NSData(contentsOfFile: targetPath) {
+                return File(data: Data(referencing:nsData), filename: filename)
+            }
+            return nil
+    }
+}

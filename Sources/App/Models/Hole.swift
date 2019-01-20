@@ -1,10 +1,6 @@
 import Vapor
 import FluentPostgreSQL
 
-// weak entity
-// cannot be uniquely identified without the id of a scorecard
-// Scorecard.ID, tee, holeNumber uniquely identify a hole in the db
-
 final class Hole: Codable {
     
     var id: Int?

@@ -7,5 +7,6 @@ XCTMain([
     testCase(GolfCourseTests.allTests),
     testCase(TeeTests.allTests),
     testCase(HoleTests.allTests),
-    testCase(ScoreTests.allTests)
+    testCase(ScoreTests.allTests),
+    testCase(ScoreImageTests.allTests)
 ])
