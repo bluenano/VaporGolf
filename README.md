@@ -24,7 +24,7 @@ REST/HTTP API built using Vapor for use by client applications relating to golf 
 Represents a person who plays golf </br>
 
 ##### Properties 
-| id                 | Int          |
+| id                 | Int?         |
 |--------------------|--------------|
 | firstName          | String       |
 | lastName           | String       | 
@@ -38,7 +38,7 @@ Represents a person who plays golf </br>
 Represents a physical location where golfers can play golf </br>
 
 ##### Properties
-| id                 | Int          |
+| id                 | Int?         |
 |--------------------|--------------|
 | name               | String       |
 | streetAddress      | String       |
@@ -51,7 +51,7 @@ Represents a physical location where golfers can play golf </br>
 Represents a tee box on the golf course where golfers choose to play from </br>
 
 ##### Properties
-| id                 | Int          |
+| id                 | Int?         |
 |--------------------|--------------|
 | name               | String       |
 
@@ -60,7 +60,7 @@ Represents a hole on the golf course where a golfer starts by hitting </br>
 a golf ball from the tee box and ends by hitting a golf ball into a hole </br>
 
 ##### Properties
-| id                 | Int          |
+| id                 | Int?         |
 |--------------------|--------------|
 | holeNumber         | Int          |
 | par                | Int          | 
@@ -73,7 +73,7 @@ Represents the scoring results of a golfer playing golf at a golf course </br>
 
 ##### Properties
 
-| id                 | Int          |
+| id                 | Int?         |
 |--------------------|--------------|
 | date               | Date         |
 | strokesPerHole     | [Int]        | 
@@ -82,6 +82,15 @@ Represents the scoring results of a golfer playing golf at a golf course </br>
 | totalScore         | Int          |
 | golferID           | Golfer.ID    |
 | teeID              | Tee.ID       |
+
+#### ScoreImage
+Represents an image of a filled out scorecard from playing golf </br>
+
+##### Properties 
+| id                 | Int?         |
+|--------------------|--------------|
+| imageData          | File?        |
+| scoreID            | Score.ID     | 
   
 ### Endpoints
 
@@ -129,6 +138,15 @@ Represents the scoring results of a golfer playing golf at a golf course </br>
 | /api/scores/first      |              |            |   |   |
 | /api/scores/search     |              |            |   |   |
 | /api/scores/sorted     |              |            |   |   |
+
+
+#### ScoreImage Endpoints
+| Endpoint                         | HTTP Methods | Parameters |   |   |
+|----------------------------------|--------------|------------|---|---|
+| /api/scoreimages                 |              |            |   |   |
+| /api/scoreimages/{scoreimage_id} |              |            |   |   |
+| /api/scoreimages/first           |              |            |   |   |
+
 
 ### Docker
 Models are persisted using a PostgreSQL database running inside of a docker container </br>
