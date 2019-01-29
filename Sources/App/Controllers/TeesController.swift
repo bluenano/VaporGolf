@@ -5,22 +5,29 @@ struct TeesController: RouteCollection {
     
     func boot(router: Router) throws {
         let teesRoutes = router.grouped("api", "tees")
-        teesRoutes.post(Tee.self, use: createHandler)
-        teesRoutes.delete(Tee.parameter, use: deleteHandler)
-        teesRoutes.put(Tee.parameter, use: updateHandler)
         teesRoutes.get(use: getAllHandler)
         teesRoutes.get(Tee.parameter, use: getHandler)
         teesRoutes.get("first", use: getFirstHandler)
         teesRoutes.get("search", use: getSearchHandler)
         teesRoutes.get("sorted", use: getSortedHandler)
         teesRoutes.get(Tee.parameter, "golfcourse", use: getGolfCourseHandler)
+        
+        let tokenAuthMiddleware = Golfer.tokenAuthMiddleware()
+        let guardAuthMiddleware = Golfer.guardAuthMiddleware()
+        let tokenAuthGroup = teesRoutes.grouped(tokenAuthMiddleware,
+                                                guardAuthMiddleware)
+        tokenAuthGroup.post(Tee.self, use: createHandler)
+        tokenAuthGroup.delete(Tee.parameter, use: deleteHandler)
+        tokenAuthGroup.put(Tee.parameter, use: updateHandler)
     }
     
     func createHandler(_ req: Request, tee: Tee) throws -> Future<Tee> {
+        _ = try req.requireAuthenticated(Golfer.self)
         return tee.save(on: req)
     }
 
     func deleteHandler(_ req: Request) throws -> Future<HTTPStatus> {
+        _ = try req.requireAuthenticated(Golfer.self)
         return try req.parameters
             .next(Tee.self)
             .delete(on: req)
@@ -28,6 +35,7 @@ struct TeesController: RouteCollection {
     }
     
     func updateHandler(_ req: Request) throws -> Future<Tee> {
+        _ = try req.requireAuthenticated(Golfer.self)
         return try flatMap(
             to: Tee.self,
             req.parameters.next(Tee.self),

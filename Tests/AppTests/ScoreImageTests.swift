@@ -48,7 +48,8 @@ final class ScoreImageTests: XCTestCase {
             method: .POST,
             headers: ["Content-Type": "application/json"],
             data: scoreImage,
-            decodeTo: ScoreImage.self)
+            decodeTo: ScoreImage.self,
+            loggedInRequest: true)
         if let imageData = receivedScoreImage.imageData {
             XCTAssertEqual(imageData.filename, scoreImagesFileName)
         }
@@ -102,7 +103,8 @@ final class ScoreImageTests: XCTestCase {
         let scoreImage = try getScoreImage()
         let receivedStatus = try app.getResponseStatus(
             to: "\(scoreImagesURI)\(scoreImage.id!)",
-            method: .DELETE)
+            method: .DELETE,
+            loggedInRequest: true)
         XCTAssertNotEqual(receivedStatus, .notFound)
         XCTAssertEqual(receivedStatus, .noContent)
     }
@@ -115,7 +117,8 @@ final class ScoreImageTests: XCTestCase {
             method: .PUT,
             headers: ["Content-Type": "application/json"],
             data: scoreImage,
-            decodeTo: ScoreImage.self)
+            decodeTo: ScoreImage.self,
+            loggedInRequest: true)
         if let imageData = receivedScoreImage.imageData {
             XCTAssertEqual(imageData.filename, scoreImagesSecondFileName)
         }

@@ -43,7 +43,8 @@ final class TeeTests: XCTestCase {
             method: .POST,
             headers: ["Content-Type": "application/json"],
             data: tee,
-            decodeTo: Tee.self)
+            decodeTo: Tee.self,
+            loggedInRequest: true)
         XCTAssertEqual(receivedTee.name, teeName)
         XCTAssertEqual(receivedTee.id, tee.id)
         
@@ -82,7 +83,8 @@ final class TeeTests: XCTestCase {
         let tee = try getTee()
         let receivedStatus = try app.getResponseStatus(
             to: "\(teesURI)\(tee.id!)",
-            method: .DELETE)
+            method: .DELETE,
+            loggedInRequest: true)
         XCTAssertNotEqual(receivedStatus, .notFound)
         XCTAssertEqual(receivedStatus, .noContent)
     }
@@ -95,7 +97,8 @@ final class TeeTests: XCTestCase {
             method: .PUT,
             headers: ["Content-Type": "application/json"],
             data: tee,
-            decodeTo: Tee.self)
+            decodeTo: Tee.self,
+            loggedInRequest: true)
         XCTAssertEqual(receivedTee.name, teeName + "2")
         XCTAssertEqual(receivedTee.id, tee.id)
     }

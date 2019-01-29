@@ -8,16 +8,18 @@ final class Score: Codable {
     var strokesPerHole: [Int]
     var puttsPerHole: [Int]
     var greensInRegulation: [Bool]
+    var fairwaysHit: [Bool]
     var golferID: Golfer.ID
     var teeID: Tee.ID
     
     init(date: Date, strokesPerHole: [Int],
          puttsPerHole: [Int], greensInRegulation: [Bool],
-         golferID: Golfer.ID, teeID: Tee.ID) {
+         fairwaysHit: [Bool], golferID: Golfer.ID, teeID: Tee.ID) {
         self.date = date
         self.strokesPerHole = strokesPerHole
         self.puttsPerHole = puttsPerHole
         self.greensInRegulation = greensInRegulation
+        self.fairwaysHit = fairwaysHit
         self.golferID = golferID
         self.teeID = teeID
     }

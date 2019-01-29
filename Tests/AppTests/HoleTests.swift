@@ -52,7 +52,8 @@ final class HoleTests: XCTestCase {
             method: .POST,
             headers: ["Content-Type": "application/json"],
             data: hole,
-            decodeTo: Hole.self)
+            decodeTo: Hole.self,
+            loggedInRequest: true)
         XCTAssertEqual(receivedHole.holeNumber, holeNumber)
         XCTAssertEqual(receivedHole.par, holePar)
         XCTAssertEqual(receivedHole.handicap, holeHandicap)
@@ -60,7 +61,8 @@ final class HoleTests: XCTestCase {
         XCTAssertEqual(receivedHole.id, hole.id)
         
         let holes = try app.getResponse(to: holesURI,
-                                        decodeTo: [Hole].self)
+                                        decodeTo: [Hole].self,
+                                        loggedInRequest: true)
         XCTAssertEqual(holes.count, 1)
         XCTAssertEqual(holes[0].holeNumber, holeNumber)
         XCTAssertEqual(holes[0].par, holePar)
@@ -104,7 +106,8 @@ final class HoleTests: XCTestCase {
         let hole = try getHole()
         let receivedStatus = try app.getResponseStatus(
             to: "\(holesURI)\(hole.id!)",
-            method: .DELETE)
+            method: .DELETE,
+            loggedInRequest: true)
         XCTAssertNotEqual(receivedStatus, .notFound)
         XCTAssertEqual(receivedStatus, .noContent)
     }
@@ -117,7 +120,8 @@ final class HoleTests: XCTestCase {
             method: .PUT,
             headers: ["Content-Type": "application/json"],
             data: hole,
-            decodeTo: Hole.self)
+            decodeTo: Hole.self,
+            loggedInRequest: true)
         XCTAssertEqual(receivedHole.holeNumber, holeNumber)
         XCTAssertEqual(receivedHole.par, holePar)
         XCTAssertEqual(receivedHole.handicap, holeHandicap+1)

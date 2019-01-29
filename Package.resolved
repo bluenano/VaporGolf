@@ -2,6 +2,24 @@
   "object": {
     "pins": [
       {
+        "package": "Auth",
+        "repositoryURL": "https://github.com/vapor/auth.git",
+        "state": {
+          "branch": null,
+          "revision": "90868627c7587ea207c0b6d4054265e68f6a33ef",
+          "version": "2.0.1"
+        }
+      },
+      {
+        "package": "Configuration",
+        "repositoryURL": "https://github.com/IBM-Swift/Configuration.git",
+        "state": {
+          "branch": null,
+          "revision": "4278530545d69b99e7e391e3980c740c9371b457",
+          "version": "3.0.2"
+        }
+      },
+      {
         "package": "Console",
         "repositoryURL": "https://github.com/vapor/console.git",
         "state": {
@@ -35,6 +53,15 @@
           "branch": null,
           "revision": "3a17dbbe9be5f8c37703e4b7982c1332ad6b00c4",
           "version": "1.3.1"
+        }
+      },
+      {
+        "package": "FileKit",
+        "repositoryURL": "https://github.com/IBM-Swift/FileKit.git",
+        "state": {
+          "branch": null,
+          "revision": "319016dbf4b3ce04589265c23c9cac0016fe8096",
+          "version": "0.0.1"
         }
       },
       {
@@ -80,6 +107,15 @@
           "branch": null,
           "revision": "6973bf50dab8dd00e4daf8cb82ca72b33f5db016",
           "version": "3.1.6"
+        }
+      },
+      {
+        "package": "LoggerAPI",
+        "repositoryURL": "https://github.com/IBM-Swift/LoggerAPI.git",
+        "state": {
+          "branch": null,
+          "revision": "d0ccb4158b83f8692531892a9c894bb757593c6f",
+          "version": "1.8.0"
         }
       },
       {

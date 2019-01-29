@@ -9,6 +9,7 @@ final class ScoreTests: XCTestCase {
     let strokesPerHole = [Int](repeating: 5, count: 18)
     let puttsPerHole = [Int](repeating: 2, count: 18)
     let greensInRegulation = [Bool](repeating: false, count: 18)
+    let fairwaysHit = [Bool](repeating: false, count: 18)
     
     let scoresURI = "/api/scores/"
     var app: Application!
@@ -29,6 +30,7 @@ final class ScoreTests: XCTestCase {
                                 strokesPerHole: strokesPerHole,
                                 puttsPerHole: puttsPerHole,
                                 greensInRegulation: greensInRegulation,
+                                fairwaysHit: fairwaysHit,
                                 on: conn)
     }
     
@@ -40,38 +42,50 @@ final class ScoreTests: XCTestCase {
                                          decodeTo: [Score].self)
         
         XCTAssertEqual(scores.count, 2)
-        //XCTAssertEqual(scores[0].date, scoreDate)
+        //XCTAssertEqual(scores[0].date.timeIntervalSince1970,
+                       //scoreDate.timeIntervalSince1970)
         XCTAssertEqual(scores[0].strokesPerHole, strokesPerHole)
         XCTAssertEqual(scores[0].puttsPerHole, puttsPerHole)
         XCTAssertEqual(scores[0].greensInRegulation, greensInRegulation)
+        XCTAssertEqual(scores[0].fairwaysHit, fairwaysHit)
         XCTAssertEqual(scores[0].id, score.id)
     }
     
     func testScoreCanBeSavedWithAPI() throws {
-        let score = try getScore()
+        let score = Score(date: scoreDate,
+                          strokesPerHole: strokesPerHole,
+                          puttsPerHole: puttsPerHole,
+                          greensInRegulation: greensInRegulation,
+                          fairwaysHit: fairwaysHit,
+                          golferID: try Golfer.create(on: conn).id!,
+                          teeID: try Tee.create(on: conn).id!)
         
         let receivedScore = try app.getResponse(
             to: scoresURI,
             method: .POST,
             headers: ["Content-Type": "application/json"],
             data: score,
-            decodeTo: Score.self)
+            decodeTo: Score.self,
+            loggedInRequest: true)
         
-        //XCTAssertEqual(receivedScore.date, scoreDate)
+        //XCTAssertEqual(receivedScore.date.timeIntervalSince1970,
+                       //scoreDate.timeIntervalSince1970)
         XCTAssertEqual(receivedScore.strokesPerHole, strokesPerHole)
         XCTAssertEqual(receivedScore.puttsPerHole, puttsPerHole)
         XCTAssertEqual(receivedScore.greensInRegulation, greensInRegulation)
-        XCTAssertEqual(receivedScore.id, score.id)
+        XCTAssertEqual(receivedScore.fairwaysHit, fairwaysHit)
         
         let scores = try app.getResponse(to: scoresURI,
                                          decodeTo: [Score].self)
         
         XCTAssertEqual(scores.count, 1)
-        //XCTAssertEqual(scores[0].date, scoreDate)
+        //XCTAssertEqual(scores[0].date.timeIntervalSince1970,
+                       //scoreDate.timeIntervalSince1970)
         XCTAssertEqual(scores[0].strokesPerHole, strokesPerHole)
         XCTAssertEqual(scores[0].puttsPerHole, puttsPerHole)
         XCTAssertEqual(scores[0].greensInRegulation, greensInRegulation)
-        XCTAssertEqual(scores[0].id, score.id)
+        XCTAssertEqual(scores[0].fairwaysHit, fairwaysHit)
+        XCTAssertEqual(scores[0].id, receivedScore.id)
     }
     
     func testGettingASingleScoreFromAPI() throws {
@@ -80,10 +94,12 @@ final class ScoreTests: XCTestCase {
             to: "\(scoresURI)\(score.id!)",
             decodeTo: Score.self)
         
-        //XCTAssertEqual(receivedScore.date, scoreDate)
+        //XCTAssertEqual(receivedScore.date.timeIntervalSince1970,
+                       //scoreDate.timeIntervalSince1970)
         XCTAssertEqual(receivedScore.strokesPerHole, strokesPerHole)
         XCTAssertEqual(receivedScore.puttsPerHole, puttsPerHole)
         XCTAssertEqual(receivedScore.greensInRegulation, greensInRegulation)
+        XCTAssertEqual(receivedScore.fairwaysHit, fairwaysHit)
         XCTAssertEqual(receivedScore.id, score.id)
     }
     
@@ -92,11 +108,13 @@ final class ScoreTests: XCTestCase {
         let score = try Score.create(golfer: golfer, on: conn)
         let receivedGolfer = try app.getResponse(
             to: "\(scoresURI)\(score.id!)/golfer/",
-            decodeTo: Golfer.self)
-        XCTAssertEqual(receivedGolfer.firstName, golfer.firstName)
-        XCTAssertEqual(receivedGolfer.lastName, golfer.lastName)
+            decodeTo: Golfer.Public.self)
+        XCTAssertEqual(receivedGolfer.username, golfer.username)
+        XCTAssertEqual(receivedGolfer.firstname, golfer.firstname)
+        XCTAssertEqual(receivedGolfer.lastname, golfer.lastname)
         XCTAssertEqual(receivedGolfer.age, golfer.age)
         XCTAssertEqual(receivedGolfer.gender, golfer.gender)
+        XCTAssertEqual(receivedGolfer.height, golfer.height)
         XCTAssertEqual(receivedGolfer.weight, golfer.weight)
         XCTAssertEqual(receivedGolfer.id, golfer.id)
     }
@@ -116,7 +134,8 @@ final class ScoreTests: XCTestCase {
         let score = try getScore()
         let receivedStatus = try app.getResponseStatus(
             to: "\(scoresURI)\(score.id!)",
-            method: .DELETE)
+            method: .DELETE,
+            loggedInRequest: true)
         XCTAssertNotEqual(receivedStatus, .notFound)
         XCTAssertEqual(receivedStatus, .noContent)
 
@@ -132,13 +151,15 @@ final class ScoreTests: XCTestCase {
             method: .PUT,
             headers: ["Content-Type": "application/json"],
             data: score,
-            decodeTo: Score.self)
+            decodeTo: Score.self,
+            loggedInRequest: true)
         for i in 0..<receivedScore.strokesPerHole.count {
             XCTAssertEqual(receivedScore.strokesPerHole[i],
                            strokesPerHole[i]+1)
         }
         XCTAssertEqual(receivedScore.puttsPerHole, puttsPerHole)
         XCTAssertEqual(receivedScore.greensInRegulation, greensInRegulation)
+        XCTAssertEqual(receivedScore.fairwaysHit, fairwaysHit)
         XCTAssertEqual(receivedScore.totalScore, score.totalScore)
     }
     

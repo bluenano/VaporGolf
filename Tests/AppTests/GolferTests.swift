@@ -5,10 +5,12 @@ import FluentPostgreSQL
 
 final class GolferTests: XCTestCase {
     
-    let golfersFirstName = "Steve"
-    let golfersLastName = "Stricker"
+    let golfersUsername = "steve_stricker"
+    let golfersFirstname = "Steve"
+    let golfersLastname = "Stricker"
     let golfersAge = 45
     let golfersGender = "male"
+    let golfersHeight = 80
     let golfersWeight = 180
     
     let golfersURI = "/api/golfers/"
@@ -28,55 +30,70 @@ final class GolferTests: XCTestCase {
     }
     
     func getGolfer() throws -> Golfer {
-        return try Golfer.create(firstName: golfersFirstName,
-                                 lastName: golfersLastName,
+        return try Golfer.create(username: golfersUsername,
+                                 firstname: golfersFirstname,
+                                 lastname: golfersLastname,
                                  age: golfersAge,
                                  gender: golfersGender,
+                                 height: golfersHeight,
                                  weight: golfersWeight,
                                  on: conn)
     }
+    
     // test that all golfers can be retrieved from the API
     func testGolfersCanBeRetrievedFromAPI() throws {
         let golfer = try getGolfer()
         _ = try Golfer.create(on: conn)
         let golfers = try app.getResponse(
             to: golfersURI,
-            decodeTo: [Golfer].self)
+            decodeTo: [Golfer.Public].self)
         
-        XCTAssertEqual(golfers.count, 2)
-        XCTAssertEqual(golfers[0].firstName, golfersFirstName)
-        XCTAssertEqual(golfers[0].lastName, golfersLastName)
-        XCTAssertEqual(golfers[0].age, golfersAge)
-        XCTAssertEqual(golfers[0].gender, golfersGender)
-        XCTAssertEqual(golfers[0].weight, golfersWeight)
-        XCTAssertEqual(golfers[0].id, golfer.id)
+        XCTAssertEqual(golfers.count, 3)
+        XCTAssertEqual(golfers[1].username, golfersUsername)
+        XCTAssertEqual(golfers[1].firstname, golfersFirstname)
+        XCTAssertEqual(golfers[1].lastname, golfersLastname)
+        XCTAssertEqual(golfers[1].age, golfersAge)
+        XCTAssertEqual(golfers[1].gender, golfersGender)
+        XCTAssertEqual(golfers[1].height, golfersHeight)
+        XCTAssertEqual(golfers[1].weight, golfersWeight)
+        XCTAssertEqual(golfers[1].id, golfer.id)
     }
  
     // test that a golfer can be saved to the API
     func testGolferCanBeSavedWithAPI() throws {
-        let golfer = try getGolfer()
+        let golfer = Golfer(username: golfersUsername,
+                            password: "password",
+                            firstname: golfersFirstname,
+                            lastname: golfersLastname,
+                            age: golfersAge,
+                            gender: golfersGender,
+                            height: golfersHeight,
+                            weight: golfersWeight)
         let receivedGolfer = try app.getResponse(
             to: golfersURI,
             method: .POST,
             headers: ["Content-Type": "application/json"],
             data: golfer,
-            decodeTo: Golfer.self)
-        XCTAssertEqual(receivedGolfer.firstName, golfersFirstName)
-        XCTAssertEqual(receivedGolfer.lastName, golfersLastName)
+            decodeTo: Golfer.Public.self,
+            loggedInRequest: true)
+        XCTAssertEqual(receivedGolfer.username, golfersUsername)
+        XCTAssertEqual(receivedGolfer.firstname, golfersFirstname)
+        XCTAssertEqual(receivedGolfer.lastname, golfersLastname)
         XCTAssertEqual(receivedGolfer.age, golfersAge)
         XCTAssertEqual(receivedGolfer.gender, golfersGender)
+        XCTAssertEqual(receivedGolfer.height, golfersHeight)
         XCTAssertEqual(receivedGolfer.weight, golfersWeight)
-        XCTAssertEqual(receivedGolfer.id, golfer.id)
         
         let golfers = try app.getResponse(to: golfersURI,
-                                          decodeTo: [Golfer].self)
-        XCTAssertEqual(golfers.count, 1)
-        XCTAssertEqual(golfers[0].firstName, golfersFirstName)
-        XCTAssertEqual(golfers[0].lastName, golfersLastName)
-        XCTAssertEqual(golfers[0].age, golfersAge)
-        XCTAssertEqual(golfers[0].gender, golfersGender)
-        XCTAssertEqual(golfers[0].weight, golfersWeight)
-        XCTAssertEqual(golfers[0].id, receivedGolfer.id)
+                                          decodeTo: [Golfer.Public].self)
+        XCTAssertEqual(golfers.count, 2)
+        XCTAssertEqual(golfers[1].firstname, golfersFirstname)
+        XCTAssertEqual(golfers[1].lastname, golfersLastname)
+        XCTAssertEqual(golfers[1].age, golfersAge)
+        XCTAssertEqual(golfers[1].gender, golfersGender)
+        XCTAssertEqual(golfers[1].height, golfersHeight)
+        XCTAssertEqual(golfers[1].weight, golfersWeight)
+        XCTAssertEqual(golfers[1].id, receivedGolfer.id)
     }
     
     // test that a single golfer can be retrieved from the API
@@ -84,11 +101,13 @@ final class GolferTests: XCTestCase {
         let golfer = try getGolfer()
         let receivedGolfer = try app.getResponse(
             to: "\(golfersURI)\(golfer.id!)",
-            decodeTo: Golfer.self)
-        XCTAssertEqual(golfer.firstName, receivedGolfer.firstName)
-        XCTAssertEqual(golfer.lastName, receivedGolfer.lastName)
+            decodeTo: Golfer.Public.self)
+        XCTAssertEqual(golfer.username, receivedGolfer.username)
+        XCTAssertEqual(golfer.firstname, receivedGolfer.firstname)
+        XCTAssertEqual(golfer.lastname, receivedGolfer.lastname)
         XCTAssertEqual(golfer.age, receivedGolfer.age)
         XCTAssertEqual(golfer.gender, receivedGolfer.gender)
+        XCTAssertEqual(golfer.height, receivedGolfer.height)
         XCTAssertEqual(golfer.weight, receivedGolfer.weight)
         XCTAssertEqual(golfer.id, receivedGolfer.id)
     }
@@ -119,25 +138,28 @@ final class GolferTests: XCTestCase {
         let golfer = try getGolfer()
         let receivedStatus = try app.getResponseStatus(
             to: "\(golfersURI)\(golfer.id!)",
-            method: .DELETE)
+            method: .DELETE,
+            loggedInRequest: true)
         XCTAssertNotEqual(receivedStatus, .notFound)
         XCTAssertEqual(receivedStatus, .noContent)
     }
     
     func testUpdatingAGolferWithAPI() throws {
         let golfer = try getGolfer()
-        golfer.firstName = golfersFirstName + "2"
+        golfer.firstname = golfersFirstname + "2"
         let receivedGolfer = try app.getResponse(
             to: "\(golfersURI)\(golfer.id!)",
             method: .PUT,
             headers: ["Content-Type": "application/json"],
             data: golfer,
-            decodeTo: Golfer.self)
-        XCTAssertEqual(receivedGolfer.firstName, golfersFirstName + "2")
-        XCTAssertEqual(receivedGolfer.lastName, golfersLastName)
+            decodeTo: Golfer.Public.self,
+            loggedInUser: golfer)
+        XCTAssertEqual(receivedGolfer.firstname, golfersFirstname + "2")
+        XCTAssertEqual(receivedGolfer.lastname, golfersLastname)
         XCTAssertEqual(receivedGolfer.age, golfersAge)
-        XCTAssertEqual(receivedGolfer.weight, golfersWeight)
         XCTAssertEqual(receivedGolfer.gender, golfersGender)
+        XCTAssertEqual(receivedGolfer.height, golfersHeight)
+        XCTAssertEqual(receivedGolfer.weight, golfersWeight)
         XCTAssertEqual(receivedGolfer.id, golfer.id)
     }
     

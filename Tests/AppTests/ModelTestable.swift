@@ -1,18 +1,31 @@
 @testable import App
 import FluentPostgreSQL
+import Crypto
 
 extension Golfer {
-    static func create(firstName: String = "Kevin",
-                       lastName: String = "Schlaff",
+    static func create(username: String? = nil,
+                       firstname: String = "Kevin",
+                       lastname: String = "Schlaff",
                        age: Int = 24,
                        gender: String = "male",
+                       height: Int = 72,
                        weight: Int = 160,
                        on connection: PostgreSQLConnection)
         throws -> Golfer {
-            let golfer = Golfer(firstName: firstName,
-                                lastName: lastName,
+            var createUsername: String
+            if let suppliedUsername = username {
+                createUsername = suppliedUsername
+            } else {
+                createUsername = UUID().uuidString
+            }
+            let password = try BCrypt.hash("password")
+            let golfer = Golfer(username: createUsername,
+                                password: password,
+                                firstname: firstname,
+                                lastname: lastname,
                                 age: age,
                                 gender: gender,
+                                height: height,
                                 weight: weight)
             return try golfer.save(on: connection).wait()
     }
@@ -23,12 +36,14 @@ extension GolfCourse {
                        streetAddress: String = "1 Golf Way",
                        city: String = "San Jose",
                        state: String = "California",
+                       country: String = "United States",
                        phoneNumber: String = "(408) 000-0000",
                        on connection: PostgreSQLConnection) throws -> GolfCourse {
         let golfCourse = GolfCourse(name: name,
                                     streetAddress: streetAddress,
                                     city: city,
                                     state: state,
+                                    country: country,
                                     phoneNumber: phoneNumber)
         return try golfCourse.save(on: connection).wait()
         
@@ -78,6 +93,7 @@ extension Score {
                        strokesPerHole: [Int] = [Int](),
                        puttsPerHole: [Int] = [Int](),
                        greensInRegulation: [Bool] = [Bool](),
+                       fairwaysHit: [Bool] = [Bool](),
                        golfer: Golfer? = nil,
                        tee: Tee? = nil,
                        on connection: PostgreSQLConnection) throws -> Score {
@@ -94,6 +110,7 @@ extension Score {
                           strokesPerHole: strokesPerHole,
                           puttsPerHole: puttsPerHole,
                           greensInRegulation: greensInRegulation,
+                          fairwaysHit: fairwaysHit,
                           golferID: scoreGolfer!.id!,
                           teeID: scoreTee!.id!)
         return try score.save(on: connection).wait()

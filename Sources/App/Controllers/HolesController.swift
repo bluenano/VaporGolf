@@ -14,13 +14,23 @@ struct HolesController: RouteCollection {
         holesRoutes.get("search", use: getSearchHandler)
         holesRoutes.get("sorted", use: getSortedHandler)
         holesRoutes.get(Hole.parameter, "tee", use: getTeeHandler)
+        
+        let tokenAuthMiddleware = Golfer.tokenAuthMiddleware()
+        let guardAuthMiddleware = Golfer.guardAuthMiddleware()
+        let tokenAuthGroup = holesRoutes.grouped(tokenAuthMiddleware,
+                                                 guardAuthMiddleware)
+        tokenAuthGroup.post(Hole.self, use: createHandler)
+        tokenAuthGroup.delete(Hole.parameter, use: deleteHandler)
+        tokenAuthGroup.put(Hole.parameter, use: updateHandler)
     }
     
     func createHandler(_ req: Request, hole: Hole) throws -> Future<Hole> {
+        _ = try req.requireAuthenticated(Golfer.self)
         return hole.save(on: req)
     }
     
     func deleteHandler(_ req: Request) throws -> Future<HTTPStatus> {
+        _ = try req.requireAuthenticated(Golfer.self)
         return try req.parameters
             .next(Hole.self)
             .delete(on: req)
@@ -28,6 +38,7 @@ struct HolesController: RouteCollection {
     }
     
     func updateHandler(_ req: Request) throws -> Future<Hole> {
+        _ = try req.requireAuthenticated(Golfer.self)
         return try flatMap(
             to: Hole.self,
             req.parameters.next(Hole.self),

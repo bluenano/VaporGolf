@@ -8,14 +8,16 @@ final class GolfCourse: Codable {
     var streetAddress: String
     var city: String
     var state: String
+    var country: String
     var phoneNumber: String
     
     init(name: String, streetAddress: String, city: String,
-         state: String, phoneNumber: String) {
+         state: String, country: String, phoneNumber: String) {
         self.name = name
         self.streetAddress = streetAddress
         self.city = city
         self.state = state
+        self.country = country
         self.phoneNumber = phoneNumber
     }
 

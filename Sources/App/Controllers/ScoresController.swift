@@ -1,13 +1,11 @@
 import Vapor
 import Fluent
+import Authentication
 
 struct ScoresController: RouteCollection {
     
     func boot(router: Router) throws {
         let scoresRoutes = router.grouped("api", "scores")
-        scoresRoutes.post(Score.self, use: createHandler)
-        scoresRoutes.delete(Score.parameter, use: deleteHandler)
-        scoresRoutes.put(Score.parameter, use: updateHandler)
         scoresRoutes.get(use: getAllHandler)
         scoresRoutes.get(Score.parameter, use: getHandler)
         scoresRoutes.get("first", use: getFirstHandler)
@@ -15,13 +13,30 @@ struct ScoresController: RouteCollection {
         scoresRoutes.get("sorted", use: getSortedHandler)
         scoresRoutes.get(Score.parameter, "golfer", use: getGolferHandler)
         scoresRoutes.get(Score.parameter, "tee", use: getTeeHandler)
+        
+        let tokenAuthMiddleware = Golfer.tokenAuthMiddleware()
+        let guardAuthMiddleware = Golfer.guardAuthMiddleware()
+        let tokenAuthGroup = scoresRoutes.grouped(tokenAuthMiddleware,
+                                                  guardAuthMiddleware)
+        tokenAuthGroup.post(ScoreCreateData.self, use: createHandler)
+        tokenAuthGroup.delete(Score.parameter, use: deleteHandler)
+        tokenAuthGroup.put(Score.parameter, use: updateHandler)
     }
     
-    func createHandler(_ req: Request, score: Score) throws -> Future<Score> {
-            return score.save(on: req)
+    func createHandler(_ req: Request, data: ScoreCreateData) throws -> Future<Score> {
+        let golfer = try req.requireAuthenticated(Golfer.self)
+        let score = try Score(date: data.date,
+                              strokesPerHole: data.strokesPerHole,
+                              puttsPerHole: data.puttsPerHole,
+                              greensInRegulation: data.greensInRegulation,
+                              fairwaysHit: data.fairwaysHit,
+                              golferID: golfer.requireID(),
+                              teeID: data.teeID)
+        return score.save(on: req)
     }
     
     func deleteHandler(_ req: Request) throws -> Future<HTTPStatus> {
+        _ = try req.requireAuthenticated(Golfer.self)
         return try req.parameters
             .next(Score.self)
             .delete(on: req)
@@ -32,13 +47,15 @@ struct ScoresController: RouteCollection {
         return try flatMap(
             to: Score.self,
             req.parameters.next(Score.self),
-            req.content.decode(Score.self)) { score, updatedScore in
+            req.content.decode(ScoreCreateData.self)) { score, updatedScore in
                 score.date = updatedScore.date
                 score.strokesPerHole = updatedScore.strokesPerHole
                 score.puttsPerHole = updatedScore.puttsPerHole
                 score.greensInRegulation = updatedScore.greensInRegulation
-                score.golferID = updatedScore.golferID
+                score.fairwaysHit = updatedScore.fairwaysHit
                 score.teeID = updatedScore.teeID
+                let golfer = try req.requireAuthenticated(Golfer.self)
+                score.golferID = try golfer.requireID()
                 return score.save(on: req)
         }
         
@@ -78,14 +95,14 @@ struct ScoresController: RouteCollection {
         return Score.query(on: req).sort(\.totalScore, .ascending).all()
     }
     
-    func getGolferHandler(_ req: Request) throws -> Future<Golfer> {
+    func getGolferHandler(_ req: Request) throws -> Future<Golfer.Public> {
         return try req.parameters
             .next(Score.self)
-            .flatMap(to: Golfer.self) {
-                score in score.golfer.get(on: req)
+            .flatMap(to: Golfer.Public.self) {
+                score in score.golfer.get(on: req).convertToPublic()
         }
     }
-    
+
     func getTeeHandler(_ req: Request) throws -> Future<Tee> {
         return try req.parameters
             .next(Score.self)
@@ -101,4 +118,13 @@ struct ScoresController: RouteCollection {
                 try score.scoreImage.query(on: req).all()
         }
     }
+}
+
+struct ScoreCreateData: Content {
+    let date: Date
+    let strokesPerHole: [Int]
+    let puttsPerHole: [Int]
+    let greensInRegulation: [Bool]
+    let fairwaysHit: [Bool]
+    let teeID: Tee.ID
 }
